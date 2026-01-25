@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="page-wrapper">
+    <div class="page-container">
+
+        <h1>Welcome, {{ user['name'] }} 👋</h1>
+
+        <p class="muted-text">
+            Tell us a little about you. We’ll build the roadmap magic.
+        </p>
+
+        <form method="POST" class="card profile-card">
+
+            <label>Career Goal</label>
+            <input
+                type="text"
+                name="career_goal"
+                placeholder="AI Engineer, Data Scientist..."
+                value="{{ profile['career_goal'] if profile }}"
+                required
+            >
+
+            <label>Current Skill Level</label>
+            <select name="current_level" required>
+                <option value="">Select level</option>
+                {% for level in ["Beginner","Intermediate","Advanced"] %}
+                <option value="{{ level }}"
+                    {% if profile and profile['current_level']==level %}selected{% endif %}>
+                    {{ level }}
+                </option>
+                {% endfor %}
+            </select>
+
+            <label>Interests</label>
+            <input
+                type="text"
+                name="interests"
+                placeholder="AI, Research, Design"
+                value="{{ profile['interests'] if profile }}"
+            >
+
+            <label>Hours per week</label>
+            <input
+                type="number"
+                name="time_per_week"
+                min="1"
+                max="60"
+                value="{{ profile['time_per_week'] if profile }}"
+                required
+            >
+
+            <button type="submit" class="btn-primary full-width">
+                Save Profile
+            </button>
+        </form>
+
+        <form method="POST" action="{{ url_for('generate_roadmap') }}">
+            <button class="btn-outline">
+                Generate My Career Roadmap 🚀
+            </button>
+        </form>
+
+    </div>
+</section>
+
+{% endblock %}

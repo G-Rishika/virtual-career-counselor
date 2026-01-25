@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="simple-section">
+    <h1>Your Career Roadmap</h1>
+
+    {% if steps and steps|length > 0 %}
+        <ul class="roadmap-list">
+            {% for step in steps %}
+                <li>{{ step }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="muted-text">
+            No roadmap yet. Hit generate and let AI cook 🔥
+        </p>
+    {% endif %}
+</section>
+
+{% endblock %}

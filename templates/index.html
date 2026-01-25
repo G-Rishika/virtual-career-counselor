@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="hero">
+    <h1>Your Career.<br>But Smarter.</h1>
+    <p>AI-powered career clarity. No noise. Just direction.</p>
+
+    <div class="hero-buttons">
+        <a href="{{ url_for('signup') }}" class="btn-primary">Discover Your Path</a>
+        <a href="{{ url_for('about') }}" class="btn-outline">How It Works</a>
+    </div>
+</section>
+
+{% endblock %}

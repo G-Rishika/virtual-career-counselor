@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="hero">
+    <h1>Welcome {{ session.username }} 👋</h1>
+    <p>Your personalized career dashboard.</p>
+</section>
+
+<section class="features">
+    <h2>Your Journey Starts Here</h2>
+
+    <div class="feature-grid">
+        <div class="card">
+            <h3>Explore Careers</h3>
+            <p>Browse curated career paths.</p>
+        </div>
+        <div class="card">
+            <h3>Enroll in Projects</h3>
+            <p>Hands-on experience matters.</p>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
