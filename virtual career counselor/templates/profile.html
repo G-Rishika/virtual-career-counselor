@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="page-wrapper">
+    <div class="page-container">
+
+        <h1 style="margin-bottom: 10px;">
+            Welcome, {{ user.name }} 👋
+        </h1>
+
+        <p style="color:#6b7280; margin-bottom: 40px;">
+            Tell us a little about you. We’ll handle the roadmap.
+        </p>
+
+        <!-- PROFILE FORM -->
+        <form method="POST" class="card" style="max-width:600px; margin:auto;">
+
+            <!-- Career Goal -->
+            <label style="display:block; text-align:left; font-weight:600; margin-bottom:6px;">
+                Career Goal
+            </label>
+            <input
+                type="text"
+                name="career_goal"
+                placeholder="e.g. Data Scientist, AI Engineer, Web Developer"
+                value="{{ profile.career_goal if profile }}"
+                required
+            >
+
+            <!-- Current Level -->
+            <label style="display:block; text-align:left; font-weight:600; margin:20px 0 6px;">
+                Current Skill Level
+            </label>
+            <select name="current_level" required>
+                <option value="">Select level</option>
+                <option value="Beginner" {% if profile and profile.current_level=="Beginner" %}selected{% endif %}>
+                    Beginner
+                </option>
+                <option value="Intermediate" {% if profile and profile.current_level=="Intermediate" %}selected{% endif %}>
+                    Intermediate
+                </option>
+                <option value="Advanced" {% if profile and profile.current_level=="Advanced" %}selected{% endif %}>
+                    Advanced
+                </option>
+            </select>
+
+            <!-- Interests -->
+            <label style="display:block; text-align:left; font-weight:600; margin:20px 0 6px;">
+                Interests
+            </label>
+            <input
+                type="text"
+                name="interests"
+                placeholder="AI, Design, Problem Solving, Research"
+                value="{{ profile.interests if profile }}"
+            >
+
+            <!-- Time Per Week -->
+            <label style="display:block; text-align:left; font-weight:600; margin:20px 0 6px;">
+                Hours you can dedicate per week
+            </label>
+            <input
+                type="number"
+                name="time_per_week"
+                min="1"
+                max="60"
+                placeholder="e.g. 10"
+                value="{{ profile.time_per_week if profile }}"
+                required
+            >
+
+            <!-- SAVE PROFILE -->
+            <button
+                type="submit"
+                class="btn-primary"
+                style="width:100%; margin-top:30px;"
+            >
+                Save Profile
+            </button>
+        </form>
+
+        <!-- GENERATE ROADMAP -->
+        <form
+            method="POST"
+            action="{{ url_for('generate_roadmap') }}"
+            style="margin-top:30px;"
+        >
+            <button class="btn-outline">
+                Generate My Career Roadmap 🚀
+            </button>
+        </form>
+
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- HERO SECTION -->
+<section class="hero">
+    <div class="hero-text">
+        <h1>Your Career.<br>But Smarter.</h1>
+        <p class="hero-sub">
+            Personalized AI-powered career guidance for clarity, direction, and growth.
+            No confusion. No noise. Just momentum.
+        </p>
+
+        <div class="hero-actions">
+            {% if session.user %}
+                <a href="#start" class="btn-primary">Discover Your Path</a>
+            {% else %}
+                <a href="{{ url_for('signup') }}" class="btn-primary">Get Started</a>
+            {% endif %}
+            <a href="#how" class="link-muted">How It Works</a>
+        </div>
+    </div>
+</section>
+
+<!-- FEATURES SECTION -->
+<section class="features" id="how">
+    <h2>What We Help You With</h2>
+
+    <div class="feature-grid">
+        <div class="card">
+            <h3>AI Career Matching</h3>
+            <p>Find careers aligned with your interests, skills, and goals.</p>
+        </div>
+
+        <div class="card">
+            <h3>Personalized Roadmaps</h3>
+            <p>Step-by-step learning paths curated just for you.</p>
+        </div>
+
+        <div class="card">
+            <h3>Industry Projects</h3>
+            <p>Real-world projects designed by experts to boost your experience.</p>
+        </div>
+
+        <div class="card">
+            <h3>Smart Guidance</h3>
+            <p>Logic-driven recommendations that evolve as you grow in your career.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ROADMAP GENERATOR / CTA -->
+{% if session.user %}
+<section class="roadmap-generator" id="start">
+    <h2>Build Your Personalized Career Roadmap</h2>
+
+    <p class="section-sub">
+        Tell us your dream role, and we’ll break it down into achievable steps.
+    </p>
+
+    <form 
+        method="POST" 
+        action="{{ url_for('generate_roadmap') }}"
+        class="roadmap-form"
+    >
+        <input 
+            type="text" 
+            name="career" 
+            placeholder="Your career goal (e.g. AI Engineer, Data Analyst)" 
+            required
+        >
+
+        <select name="level" required>
+            <option value="" disabled selected>Current level</option>
+            <option value="beginner">Beginner</option>
+            <option value="intermediate">Intermediate</option>
+        </select>
+
+        <button type="submit" class="btn-primary">
+            Generate My Roadmap 🚀
+        </button>
+    </form>
+</section>
+{% else %}
+<section class="cta" id="start">
+    <h2>Still guessing your future?</h2>
+    <p>Let data and AI do the thinking. Start your free assessment now.</p>
+    <a href="{{ url_for('signup') }}" class="btn-primary">Start Free Assessment</a>
+</section>
+{% endif %}
+
+{% endblock %}
