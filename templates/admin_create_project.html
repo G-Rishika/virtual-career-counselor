@@ -1,11 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Create New Project</h2>
-<form method="POST">
-    <label>Project Title:</label>
-    <input type="text" name="title" required>
-    <label>Project Description:</label>
-    <textarea name="description" required></textarea>
-    <button type="submit">Create Project</button>
-</form>
+
+<section class="dashboard-container">
+    <h2>Create Career Project</h2>
+
+    <form method="POST" class="form-box">
+        <input type="text" name="title" placeholder="Project Title" required>
+        <textarea name="description" placeholder="Project Description" required></textarea>
+
+        <button type="submit" class="btn-primary">Create Project</button>
+    </form>
+</section>
+
 {% endblock %}

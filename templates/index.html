@@ -2,13 +2,40 @@
 {% block content %}
 
 <section class="hero">
-    <h1>Your Career.<br>But Smarter.</h1>
-    <p>AI-powered career clarity. No noise. Just direction.</p>
+    <h1>Find Your Career Path<br>With AI-Powered Clarity</h1>
+    <p>Personalized guidance, skill paths, insights and steps that match your potential.</p>
 
     <div class="hero-buttons">
-        <a href="{{ url_for('signup') }}" class="btn-primary">Discover Your Path</a>
+        <a href="{{ url_for('signup') }}" class="btn-primary">Get Started</a>
         <a href="{{ url_for('about') }}" class="btn-outline">How It Works</a>
     </div>
+</section>
+
+<section class="features">
+    <h2>What You Can Do</h2>
+    <div class="feature-grid">
+        <div class="card">
+            <h3>Explore Careers</h3>
+            <p>Browse careers based on interests, goals, and strengths.</p>
+        </div>
+        <div class="card">
+            <h3>Create Roadmaps</h3>
+            <p>Get step-by-step career plans based on your inputs.</p>
+        </div>
+        <div class="card">
+            <h3>AI Guidance</h3>
+            <p>Receive tips and suggestions driven by AI logic.</p>
+        </div>
+        <div class="card">
+            <h3>Track Progress</h3>
+            <p>Monitor your skill development and milestones.</p>
+        </div>
+    </div>
+</section>
+
+<section class="cta">
+    <h2>Ready to start your career journey?</h2>
+    <a href="{{ url_for('signup') }}" class="btn-primary">Start Free</a>
 </section>
 
 {% endblock %}

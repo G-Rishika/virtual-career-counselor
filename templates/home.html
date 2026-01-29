@@ -1,22 +1,20 @@
 {% extends "base.html" %}
 {% block content %}
 
-<section class="hero">
-    <h1>Welcome {{ session.username }} 👋</h1>
-    <p>Your personalized career dashboard.</p>
+<section class="dashboard-hero">
+    <h1>Hey {{ session.username }}, Welcome Back!</h1>
+    <p>Your AI-assisted career dashboard</p>
 </section>
 
-<section class="features">
-    <h2>Your Journey Starts Here</h2>
-
-    <div class="feature-grid">
+<section class="user-overview">
+    <div class="card-grid">
         <div class="card">
-            <h3>Explore Careers</h3>
-            <p>Browse curated career paths.</p>
+            <h3>My Path</h3>
+            <p>Explore or generate your roadmap.</p>
         </div>
         <div class="card">
-            <h3>Enroll in Projects</h3>
-            <p>Hands-on experience matters.</p>
+            <h3>My Projects</h3>
+            <p>Track learning goals and projects.</p>
         </div>
     </div>
 </section>

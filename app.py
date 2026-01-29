@@ -1,293 +1,337 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
-from werkzeug.security import generate_password_hash, check_password_hash
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 import sqlite3
-from datetime import datetime
-import os
 
 app = Flask(__name__)
-app.secret_key = "supersecretkey123"
+app.secret_key = "super_secret_key"
 
-# ================= DATABASE =================
-DB_PATH = os.path.join(os.path.dirname(__file__), "career.db")
+DB_NAME = "career.db"
 
+
+# -------------------- DATABASE --------------------
 def get_db():
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(DB_NAME)
     conn.row_factory = sqlite3.Row
     return conn
 
-def init_db():
-    """Create all necessary tables if they don't exist."""
-    db = get_db()
-    db.execute('''
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            email TEXT NOT NULL UNIQUE,
-            password TEXT NOT NULL,
-            role TEXT DEFAULT 'user'
-        )
-    ''')
-    db.execute('''
-        CREATE TABLE IF NOT EXISTS profiles (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER UNIQUE,
-            career_goal TEXT,
-            current_level TEXT,
-            interests TEXT,
-            time_per_week INTEGER,
-            FOREIGN KEY(user_id) REFERENCES users(id)
-        )
-    ''')
-    db.execute('''
-        CREATE TABLE IF NOT EXISTS roadmaps (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER,
-            roadmap TEXT,
-            created_at TEXT,
-            FOREIGN KEY(user_id) REFERENCES users(id)
-        )
-    ''')
-    db.commit()
-    db.close()
 
-# Initialize DB at startup
+def init_db():
+    conn = get_db()
+    cur = conn.cursor()
+
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT UNIQUE,
+        email TEXT,
+        password TEXT
+    )
+    """)
+
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS profiles (
+        user_id INTEGER,
+        career_goal TEXT,
+        current_level TEXT,
+        interests TEXT,
+        time_per_week INTEGER
+    )
+    """)
+
+    conn.commit()
+    conn.close()
+
+
 init_db()
 
-# ================= ROADMAP LOGIC =================
-def generate_roadmap_logic(profile):
-    goal = profile["career_goal"].lower()
-    level = profile["current_level"].lower()
-    time = int(profile["time_per_week"])
 
-    steps = []
+# -------------------- ROADMAP LOGIC --------------------
+ROADMAPS = {
+    "software developer": [
+        "Learn Python or Java basics",
+        "Understand data structures and algorithms",
+        "Build small projects (calculator, todo app)",
+        "Learn Git & GitHub",
+        "Explore backend or frontend",
+        "Do internships or freelance projects",
+        "Apply for junior developer roles"
+    ],
+    "data scientist": [
+        "Learn Python and statistics",
+        "Master NumPy, Pandas, Matplotlib",
+        "Learn SQL and data cleaning",
+        "Understand machine learning basics",
+        "Build real datasets projects",
+        "Learn model deployment",
+        "Apply for data roles"
+    ],
+    "ui ux designer": [
+        "Understand design principles",
+        "Learn Figma or Adobe XD",
+        "Practice wireframing",
+        "Build design case studies",
+        "Learn user research",
+        "Create portfolio",
+        "Apply for design internships"
+    ]
+}
 
-    if "data" in goal:
-        steps = [
-            "Python fundamentals",
-            "Statistics & Probability",
-            "Pandas, NumPy, SQL",
-            "Data visualization",
-            "Mini data projects",
-            "Internship preparation"
-        ]
-    elif "ai" in goal:
-        steps = [
-            "Python & math foundations",
-            "Machine Learning basics",
-            "Neural Networks",
-            "TensorFlow / PyTorch",
-            "AI projects"
-        ]
-    elif "web" in goal:
-        steps = [
-            "HTML, CSS, JavaScript",
-            "React fundamentals",
-            "Flask backend",
-            "Databases",
-            "Deploy full-stack apps"
-        ]
-    else:
-        steps = [
-            "Learn field basics",
-            "Build core skills",
-            "Create projects",
-            "Apply for roles"
-        ]
 
-    if level == "beginner":
-        steps.insert(0, "Programming fundamentals")
+def generate_roadmap(goal):
+    goal = goal.lower()
+    for key in ROADMAPS:
+        if key in goal:
+            return ROADMAPS[key]
+    return [
+        "Understand basics of your chosen field",
+        "Learn required core skills",
+        "Build beginner projects",
+        "Gain practical experience",
+        "Create portfolio",
+        "Apply for roles"
+    ]
 
-    if time < 5:
-        steps.append("Follow a slow-paced learning plan")
 
-    return steps
+# -------------------- CHATBOT LOGIC --------------------
+def chatbot_reply(msg):
+    msg = msg.lower()
 
-# ================= ROUTES =================
+    if "career" in msg:
+        return "Tell me your interests and strengths. I’ll help you choose a career path."
+
+    if "software" in msg:
+        return "Software development is a solid choice. Want a roadmap?"
+
+    if "data" in msg:
+        return "Data science needs math + coding. Want a learning plan?"
+
+    if "confused" in msg or "help" in msg:
+        return "Totally normal. Career clarity takes time. Start with interests."
+
+    if "roadmap" in msg:
+        return "Go to Profile → enter your career goal → generate roadmap ✨"
+
+    return "I’m here for career guidance 🌱 Ask me about careers, skills, or roadmaps."
+
+
+# -------------------- ROUTES --------------------
+
+# 🔥 LANDING PAGE LOGIC (IMPORTANT)
 @app.route("/")
 def index():
+    if "user_id" in session:
+        return redirect(url_for("home"))
     return render_template("index.html")
+
 
 @app.route("/about")
 def about():
     return render_template("about.html")
 
-# ================= SIGNUP =================
+
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
+    if "user_id" in session:
+        return redirect(url_for("home"))
+
     if request.method == "POST":
-        name = request.form.get("name")
-        email = request.form.get("email")
-        password = request.form.get("password")
+        username = request.form["username"]
+        email = request.form["email"]
+        password = request.form["password"]
 
-        if not name or not email or not password:
-            flash("All fields are required!", "danger")
-            return redirect(url_for("signup"))
-
-        password_hash = generate_password_hash(password)
-        db = get_db()
+        conn = get_db()
+        cur = conn.cursor()
         try:
-            db.execute(
-                "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)",
-                (name, email, password_hash, "user")
+            cur.execute(
+                "INSERT INTO users (username, email, password) VALUES (?, ?, ?)",
+                (username, email, password)
             )
-            db.commit()
-            flash("Signup successful. Login now.", "success")
-            return redirect(url_for("login"))
-        except sqlite3.IntegrityError:
-            flash("Email already exists", "danger")
-            return redirect(url_for("signup"))
+            conn.commit()
+        except:
+            return "User already exists"
         finally:
-            db.close()
+            conn.close()
+
+        return redirect(url_for("login"))
 
     return render_template("signup.html")
 
-# ================= LOGIN =================
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    # 🚫 Already logged in? straight to dashboard
+    if "user_id" in session:
+        return redirect(url_for("home"))
+
     if request.method == "POST":
-        email = request.form.get("email")
-        password = request.form.get("password")
+        username = request.form["username"]
+        password = request.form["password"]
 
-        if not email or not password:
-            flash("Email and password are required!", "danger")
-            return redirect(url_for("login"))
+        conn = get_db()
+        cur = conn.cursor()
+        cur.execute(
+            "SELECT * FROM users WHERE username=? AND password=?",
+            (username, password)
+        )
+        user = cur.fetchone()
+        conn.close()
 
-        db = get_db()
-        user = db.execute(
-            "SELECT * FROM users WHERE email = ?", (email,)
-        ).fetchone()
-        db.close()
-
-        if user and check_password_hash(user["password"], password):
-            session["user"] = dict(user)
-            flash(f"Welcome, {user['name']}!", "success")
+        if user:
+            session["user_id"] = user["id"]
+            session["username"] = user["username"]
             return redirect(url_for("home"))
 
-        flash("Invalid credentials", "danger")
-        return redirect(url_for("login"))
+        return "Invalid credentials"
 
     return render_template("login.html")
 
-# ================= LOGOUT =================
-@app.route("/logout")
-def logout():
-    session.clear()
-    flash("Logged out successfully", "info")
-    return redirect(url_for("index"))
 
-# ================= HOME =================
+# 🎯 DASHBOARD (HOME)
 @app.route("/home")
 def home():
-    if "user" not in session:
-        flash("Please login first", "warning")
+    if "user_id" not in session:
         return redirect(url_for("login"))
-    return render_template("home.html", user=session["user"])
+    return render_template("home.html")
 
-# ================= PROFILE =================
+
 @app.route("/profile", methods=["GET", "POST"])
 def profile():
-    if "user" not in session:
-        flash("Please login first", "warning")
+    if "user_id" not in session:
         return redirect(url_for("login"))
 
-    user_id = session["user"]["id"]
-    db = get_db()
+    conn = get_db()
+    cur = conn.cursor()
 
     if request.method == "POST":
-        career_goal = request.form.get("career_goal")
-        current_level = request.form.get("current_level")
-        interests = request.form.get("interests")
-        time_per_week = request.form.get("time_per_week")
+        career_goal = request.form["career_goal"]
+        current_level = request.form["current_level"]
+        interests = request.form["interests"]
+        time = request.form["time_per_week"]
 
-        if not career_goal or not current_level or not interests or not time_per_week:
-            flash("All profile fields are required!", "danger")
-            db.close()
-            return redirect(url_for("profile"))
+        cur.execute("DELETE FROM profiles WHERE user_id=?", (session["user_id"],))
+        cur.execute("""
+            INSERT INTO profiles VALUES (?, ?, ?, ?, ?)
+        """, (session["user_id"], career_goal, current_level, interests, time))
+        conn.commit()
 
-        db.execute("""
-            INSERT OR REPLACE INTO profiles
-            (user_id, career_goal, current_level, interests, time_per_week)
-            VALUES (?, ?, ?, ?, ?)
-        """, (user_id, career_goal, current_level, interests, time_per_week))
-        db.commit()
-        flash("Profile saved successfully", "success")
+        return redirect(url_for("roadmap"))
 
-    profile = db.execute(
-        "SELECT * FROM profiles WHERE user_id = ?", (user_id,)
-    ).fetchone()
-    db.close()
-    return render_template("profile.html", user=session["user"], profile=profile)
+    cur.execute("SELECT * FROM profiles WHERE user_id=?", (session["user_id"],))
+    profile = cur.fetchone()
+    conn.close()
 
-# ================= ROADMAP =================
-@app.route("/generate_roadmap", methods=["POST"])
-def generate_roadmap():
-    if "user" not in session:
-        flash("Please login first", "warning")
-        return redirect(url_for("login"))
+    return render_template("profile.html", profile=profile)
 
-    user_id = session["user"]["id"]
-    db = get_db()
-
-    profile = db.execute(
-        "SELECT * FROM profiles WHERE user_id = ?", (user_id,)
-    ).fetchone()
-
-    if not profile:
-        flash("Complete your profile first", "warning")
-        db.close()
-        return redirect(url_for("profile"))
-
-    steps = generate_roadmap_logic(profile)
-    db.execute("""
-        INSERT INTO roadmaps (user_id, roadmap, created_at)
-        VALUES (?, ?, ?)
-    """, (user_id, "\n".join(steps), datetime.now().strftime("%Y-%m-%d %H:%M")))
-    db.commit()
-    db.close()
-    return redirect(url_for("roadmap"))
 
 @app.route("/roadmap")
 def roadmap():
-    if "user" not in session:
-        flash("Please login first", "warning")
+    if "user_id" not in session:
         return redirect(url_for("login"))
 
-    user_id = session["user"]["id"]
-    db = get_db()
-    data = db.execute(
-        "SELECT roadmap FROM roadmaps WHERE user_id=? ORDER BY id DESC",
-        (user_id,)
-    ).fetchone()
-    db.close()
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute("SELECT career_goal FROM profiles WHERE user_id=?", (session["user_id"],))
+    data = cur.fetchone()
+    conn.close()
 
-    steps = data["roadmap"].split("\n") if data else []
+    steps = generate_roadmap(data["career_goal"]) if data else []
     return render_template("roadmap.html", steps=steps)
 
-# ================= CHATBOT PAGE =================
-@app.route("/chat_page")
-def chat_page():
-    if "user" not in session:
-        flash("Please login first", "warning")
-        return redirect(url_for("login"))
-    return render_template("chat.html", user=session["user"])
 
-# ================= CHATBOT API =================
+@app.route("/projects")
+def projects():
+    projects = [
+        {
+            "title": "Software Developer",
+            "problem_statement": "Build applications, websites, and systems"
+        },
+        {
+            "title": "Data Scientist",
+            "problem_statement": "Analyze data and build predictive models"
+        },
+        {
+            "title": "UI/UX Designer",
+            "problem_statement": "Design user-friendly digital experiences"
+        }
+    ]
+    return render_template("projects_list.html", projects=projects)
+
+
 @app.route("/chat", methods=["POST"])
 def chat():
-    msg = request.json.get("message", "").lower()
-
-    # Simple AI reply logic
-    if "ai" in msg:
-        reply = "AI needs Python, ML, and projects."
-    elif "data" in msg:
-        reply = "Data science mixes stats, Python, and SQL."
-    elif "web" in msg:
-        reply = "Web dev = frontend + backend + deployment."
-    else:
-        reply = "Ask me about AI, Data Science, or Web Dev."
-
+    msg = request.json.get("message")
+    reply = chatbot_reply(msg)
     return jsonify({"reply": reply})
 
-# ================= RUN =================
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("index"))
+
+# ================= ADMIN AUTH =================
+
+@app.route("/admin/login", methods=["GET", "POST"])
+def admin_login():
+    if request.method == "POST":
+        email = request.form["email"]
+        password = request.form["password"]
+
+        admin = Admin.query.filter_by(email=email).first()
+
+        if admin and admin.password == password:
+            session["admin"] = admin.email
+            return redirect(url_for("admin_dashboard"))
+
+    return render_template("admin_login.html")
+
+
+@app.route("/admin/signup", methods=["GET", "POST"])
+def admin_signup():
+    if request.method == "POST":
+        admin = Admin(
+            name=request.form["name"],
+            email=request.form["email"],
+            password=request.form["password"]
+        )
+        db.session.add(admin)
+        db.session.commit()
+        return redirect(url_for("admin_login"))
+
+    return render_template("admin_signup.html")
+
+
+@app.route("/admin/dashboard")
+def admin_dashboard():
+    if "admin" not in session:
+        return redirect(url_for("admin_login"))
+    return render_template("admin_dashboard.html")
+
+
+@app.route("/admin/users")
+def admin_users():
+    if "admin" not in session:
+        return redirect(url_for("admin_login"))
+
+    users = User.query.all()
+    return render_template("admin_users.html", users=users)
+
+
+@app.route("/admin/project/create", methods=["GET", "POST"])
+def admin_create_project():
+    if "admin" not in session:
+        return redirect(url_for("admin_login"))
+
+    if request.method == "POST":
+        project = Project(
+            title=request.form["title"],
+            description=request.form["description"]
+        )
+        db.session.add(project)
+        db.session.commit()
+        return redirect(url_for("admin_dashboard"))
+
+    return render_template("admin_create_project.html")
+
+# -------------------- RUN --------------------
 if __name__ == "__main__":
     app.run(debug=True)

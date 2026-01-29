@@ -2,33 +2,138 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Virtual Career Counselor</title>
+    <title>{{ title or "Virtual Career Counselor" }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Main CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
+<!-- ================= NAVBAR ================= -->
 <header class="navbar">
-    <div class="nav-logo">VCC</div>
+    <div class="nav-logo">CareerCounsel</div>
+
     <nav>
         <a href="{{ url_for('index') }}">Home</a>
         <a href="{{ url_for('about') }}">About</a>
+        <a href="{{ url_for('profile') }}">Career Path</a>
 
         {% if session.username %}
             <a href="{{ url_for('home') }}" class="btn-outline">Dashboard</a>
             <a href="{{ url_for('logout') }}">Logout</a>
         {% else %}
             <a href="{{ url_for('login') }}">Login</a>
-            <a href="{{ url_for('signup') }}" class="btn-primary">Get Started</a>
+            <a href="{{ url_for('signup') }}" class="btn-primary">Signup</a>
         {% endif %}
     </nav>
 </header>
 
-{% block content %}{% endblock %}
+<!-- ================= PAGE CONTENT ================= -->
+<main>
+    {% block content %}{% endblock %}
+</main>
 
+<!-- ================= FOOTER ================= -->
 <footer>
-    <p>© 2026 Virtual Career Counselor · Created by Rishika</p>
+    <p>© 2026 CareerCounsel · Build your career with AI assistance</p>
 </footer>
+
+<!-- ================================================= -->
+<!-- ================= NEON CHATBOT ================= -->
+<!-- ================================================= -->
+
+<div id="chatbot-container">
+
+    <!-- Floating Button -->
+    <div id="chatbot-button" title="Ask CareerBot">💬</div>
+
+    <!-- Chat Box -->
+    <div id="chatbot-box">
+        <div class="chatbot-header">
+            CareerBot
+            <span id="chatbot-close">✕</span>
+        </div>
+
+        <div id="chatbot-messages"></div>
+
+        <form id="chatbot-form" autocomplete="off">
+            <input
+                id="chatbot-input"
+                placeholder="Ask about careers..."
+                autocomplete="off"
+            >
+            <button type="submit">➤</button>
+        </form>
+    </div>
+
+</div>
+
+<!-- ================= CHATBOT SCRIPT ================= -->
+<script>
+const botBtn = document.getElementById("chatbot-button")
+const botBox = document.getElementById("chatbot-box")
+const closeBtn = document.getElementById("chatbot-close")
+const form = document.getElementById("chatbot-form")
+const input = document.getElementById("chatbot-input")
+const messages = document.getElementById("chatbot-messages")
+
+/* Toggle chatbot */
+botBtn.onclick = () => {
+    botBox.style.display = botBox.style.display === "flex" ? "none" : "flex"
+}
+
+closeBtn.onclick = () => {
+    botBox.style.display = "none"
+}
+
+/* Send message */
+form.onsubmit = e => {
+    e.preventDefault()
+    const msg = input.value.trim()
+    if (!msg) return
+
+    messages.innerHTML += `<div class="user-message">${msg}</div>`
+    messages.scrollTop = messages.scrollHeight
+    input.value = ""
+
+    fetch("/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: msg })
+    })
+    .then(res => res.json())
+    .then(data => {
+        messages.innerHTML += `<div class="bot-message">${data.reply}</div>`
+        messages.scrollTop = messages.scrollHeight
+    })
+}
+
+/* ================= DRAGGABLE FLOATING BUTTON ================= */
+let isDragging = false
+let offsetX = 0
+let offsetY = 0
+
+botBtn.addEventListener("mousedown", e => {
+    isDragging = true
+    const rect = botBtn.getBoundingClientRect()
+    offsetX = e.clientX - rect.left
+    offsetY = e.clientY - rect.top
+})
+
+document.addEventListener("mousemove", e => {
+    if (!isDragging) return
+    botBtn.style.left = e.clientX - offsetX + "px"
+    botBtn.style.top = e.clientY - offsetY + "px"
+    botBtn.style.right = "auto"
+    botBtn.style.bottom = "auto"
+    botBtn.style.position = "fixed"
+})
+
+document.addEventListener("mouseup", () => {
+    isDragging = false
+})
+</script>
 
 </body>
 </html>

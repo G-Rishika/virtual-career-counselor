@@ -1,23 +1,21 @@
 {% extends "base.html" %}
 {% block content %}
 
-<section class="simple-section">
-    <h1>Registered Users</h1>
+<section class="dashboard-container">
+    <h2>Registered Users</h2>
 
     <table class="admin-table">
         <tr>
-            <th>Name</th>
+            <th>ID</th>
+            <th>Username</th>
             <th>Email</th>
-            <th>Role</th>
-            <th>Last Login</th>
         </tr>
 
         {% for user in users %}
         <tr>
-            <td>{{ user[0] }}</td>
-            <td>{{ user[1] }}</td>
-            <td>{{ user[2] }}</td>
-            <td>{{ user[3] or "—" }}</td>
+            <td>{{ user.id }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.email }}</td>
         </tr>
         {% endfor %}
     </table>

@@ -352,4 +352,312 @@ footer {
     cursor: pointer;
 }
 
+/* ================= PROFILE PAGE ================= */
+
+.profile-page {
+    min-height: calc(100vh - 160px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+}
+
+.profile-card {
+    width: 100%;
+    max-width: 700px;
+    background: rgba(0, 0, 0, 0.75);
+    border-radius: 22px;
+    padding: 40px 45px;
+    border: 1px solid rgba(255, 106, 0, 0.25);
+    box-shadow:
+        0 0 30px rgba(255, 106, 0, 0.15),
+        0 30px 80px rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(14px);
+}
+
+.profile-card h2 {
+    text-align: center;
+    margin-bottom: 35px;
+    color: var(--orange-main);
+    font-size: 32px;
+}
+
+/* ---------- FORM ---------- */
+
+.profile-card form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+}
+
+.form-row {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-row label {
+    margin-bottom: 6px;
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+.profile-card input,
+.profile-card select {
+    padding: 12px 14px;
+    border-radius: 14px;
+    border: 1px solid #333;
+    background: #0b0b10;
+    color: white;
+    transition: all 0.25s ease;
+}
+
+/* 🔥 NEON FOCUS GLOW */
+.profile-card input:focus,
+.profile-card select:focus {
+    outline: none;
+    border-color: var(--orange-main);
+    box-shadow:
+        0 0 0 2px rgba(255, 106, 0, 0.35),
+        0 0 25px rgba(255, 106, 0, 0.55);
+}
+
+/* ---------- BUTTON ---------- */
+
+.profile-card button {
+    grid-column: span 2;
+    margin-top: 20px;
+    padding: 14px;
+    font-size: 16px;
+    border-radius: 16px;
+    cursor: pointer;
+    background: linear-gradient(135deg, var(--orange-main), var(--orange-dark));
+    border: none;
+    color: white;
+    font-weight: 600;
+    transition: all 0.25s ease;
+}
+
+/* 🔥 BUTTON GLOW ON HOVER / CLICK */
+.profile-card button:hover {
+    box-shadow:
+        0 0 35px rgba(255, 106, 0, 0.7),
+        0 10px 40px rgba(255, 106, 0, 0.4);
+    transform: translateY(-2px);
+}
+
+.profile-card button:active {
+    transform: scale(0.97);
+    box-shadow:
+        0 0 45px rgba(255, 106, 0, 0.9);
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 768px) {
+    .profile-card form {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-card button {
+        grid-column: span 1;
+    }
+}
+
+/* ================= NEON CHATBOT ================= */
+
+#chatbot-container {
+    position: fixed;
+    bottom: 26px;
+    right: 26px;
+    z-index: 9999;
+}
+
+/* 💬 Floating Button */
+#chatbot-button {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: radial-gradient(circle at top, #ff8c3a, #ff6a00);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    cursor: pointer;
+    box-shadow:
+        0 0 25px rgba(255, 106, 0, 0.8),
+        0 0 60px rgba(255, 106, 0, 0.4);
+    animation: pulse 2.5s infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 20px rgba(255,106,0,0.5); }
+    50% { box-shadow: 0 0 45px rgba(255,106,0,0.9); }
+    100% { box-shadow: 0 0 20px rgba(255,106,0,0.5); }
+}
+
+/* 🧠 Chat Box */
+#chatbot-box {
+    width: 340px;
+    height: 440px;
+    background: rgba(5, 5, 10, 0.95);
+    border-radius: 22px;
+    box-shadow:
+        0 0 50px rgba(255,106,0,0.45),
+        0 40px 100px rgba(0,0,0,0.9);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    margin-bottom: 14px;
+    border: 1px solid rgba(255,106,0,0.3);
+}
+
+/* Header */
+.chatbot-header {
+    background: linear-gradient(135deg, var(--orange-main), var(--orange-dark));
+    padding: 14px 18px;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#chatbot-messages {
+    flex: 1;
+    padding: 14px;
+    overflow-y: auto;
+    background: #050507;
+}
+
+.user-message {
+    align-self: flex-end;
+    background: var(--orange-main);
+    padding: 10px 14px;
+    border-radius: 16px 16px 0 16px;
+    margin-bottom: 10px;
+}
+
+.bot-message {
+    align-self: flex-start;
+    background: #111;
+    padding: 10px 14px;
+    border-radius: 16px 16px 16px 0;
+    margin-bottom: 10px;
+}
+
+/* Input */
+#chatbot-form {
+    display: flex;
+    padding: 10px;
+    gap: 8px;
+    border-top: 1px solid #222;
+}
+
+#chatbot-input {
+    flex: 1;
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: #0b0b10;
+    border: 1px solid #333;
+    color: white;
+}
+
+#chatbot-form button {
+    border-radius: 12px;
+    border: none;
+    background: var(--orange-main);
+    color: white;
+    padding: 0 16px;
+}
+
+/* ================= GLOBAL ANIMATIONS ================= */
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.hero,
+.features,
+.dashboard,
+.profile-card,
+.card,
+.feature-card {
+    animation: fadeUp 0.8s ease forwards;
+}
+
+/* ================= DASHBOARD CARDS ================= */
+
+.card {
+    position: relative;
+    overflow: hidden;
+}
+
+.card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        circle at top left,
+        rgba(255, 106, 0, 0.18),
+        transparent 60%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.card:hover::before {
+    opacity: 1;
+}
+
+.card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow:
+        0 0 35px rgba(255, 106, 0, 0.35),
+        0 30px 80px rgba(0, 0, 0, 0.9);
+}
+
+.dashboard-container {
+    max-width: 900px;
+    margin: 60px auto;
+    text-align: center;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.dashboard-card {
+    padding: 30px;
+    border-radius: 16px;
+    background: #111;
+    color: #fff;
+    text-decoration: none;
+    box-shadow: 0 0 15px rgba(255, 115, 0, 0.4);
+    transition: 0.3s;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 25px rgba(255, 115, 0, 0.8);
+}
+
+.admin-table {
+    width: 100%;
+    margin-top: 30px;
+    border-collapse: collapse;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 12px;
+    border-bottom: 1px solid #333;
+}
 

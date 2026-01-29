@@ -1,67 +1,25 @@
 {% extends "base.html" %}
 {% block content %}
+<section class="profile-page">
+    <h1>Your Profile</h1>
+    <form method="POST">
+        <label>Career Goal</label>
+        <input type="text" name="career_goal" value="{{ profile.career_goal or '' }}" required>
 
-<section class="page-wrapper">
-    <div class="page-container">
+        <label>Current Skill Level</label>
+        <select name="current_level" required>
+            <option {% if profile.current_level=='Beginner' %}selected{% endif %}>Beginner</option>
+            <option {% if profile.current_level=='Intermediate' %}selected{% endif %}>Intermediate</option>
+            <option {% if profile.current_level=='Advanced' %}selected{% endif %}>Advanced</option>
+        </select>
 
-        <h1>Welcome, {{ user['name'] }} 👋</h1>
+        <label>Interests</label>
+        <input type="text" name="interests" value="{{ profile.interests or '' }}">
 
-        <p class="muted-text">
-            Tell us a little about you. We’ll build the roadmap magic.
-        </p>
+        <label>Hours per week</label>
+        <input type="number" name="time_per_week" value="{{ profile.time_per_week or '' }}" required>
 
-        <form method="POST" class="card profile-card">
-
-            <label>Career Goal</label>
-            <input
-                type="text"
-                name="career_goal"
-                placeholder="AI Engineer, Data Scientist..."
-                value="{{ profile['career_goal'] if profile }}"
-                required
-            >
-
-            <label>Current Skill Level</label>
-            <select name="current_level" required>
-                <option value="">Select level</option>
-                {% for level in ["Beginner","Intermediate","Advanced"] %}
-                <option value="{{ level }}"
-                    {% if profile and profile['current_level']==level %}selected{% endif %}>
-                    {{ level }}
-                </option>
-                {% endfor %}
-            </select>
-
-            <label>Interests</label>
-            <input
-                type="text"
-                name="interests"
-                placeholder="AI, Research, Design"
-                value="{{ profile['interests'] if profile }}"
-            >
-
-            <label>Hours per week</label>
-            <input
-                type="number"
-                name="time_per_week"
-                min="1"
-                max="60"
-                value="{{ profile['time_per_week'] if profile }}"
-                required
-            >
-
-            <button type="submit" class="btn-primary full-width">
-                Save Profile
-            </button>
-        </form>
-
-        <form method="POST" action="{{ url_for('generate_roadmap') }}">
-            <button class="btn-outline">
-                Generate My Career Roadmap 🚀
-            </button>
-        </form>
-
-    </div>
+        <button class="btn-primary">Save</button>
+    </form>
 </section>
-
 {% endblock %}

@@ -1,12 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Admin Login</h2>
-<form method="POST">
-    <label>Email:</label>
-    <input type="email" name="email" required>
-    <label>Password:</label>
-    <input type="password" name="password" required>
-    <button type="submit">Login</button>
-</form>
-<p>Don't have an admin account? <a href="{{ url_for('admin_signup') }}">Signup here</a></p>
+
+<section class="auth-container">
+    <h2>Admin Login</h2>
+
+    <form method="POST">
+        <input type="email" name="email" placeholder="Admin Email" required>
+        <input type="password" name="password" placeholder="Password" required>
+
+        <button type="submit" class="btn-primary">Login</button>
+    </form>
+</section>
+
 {% endblock %}

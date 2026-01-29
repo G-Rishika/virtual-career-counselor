@@ -1,17 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
-
-<section class="simple-section">
-    <h1>Career Projects</h1>
+<section class="paths-section">
+    <h1>Career Paths</h1>
 
     <div class="cards-grid">
         {% for project in projects %}
-        <div class="card">
-            <h3>{{ project.title }}</h3>
-            <p>{{ project.problem_statement }}</p>
-        </div>
+            <div class="card">
+                <h3>{{ project.title }}</h3>
+                <p>{{ project.problem_statement }}</p>
+            </div>
         {% endfor %}
     </div>
 </section>
-
 {% endblock %}
