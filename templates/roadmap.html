@@ -1,16 +1,30 @@
 {% extends "base.html" %}
 {% block content %}
-<section class="roadmap-section">
-    <h1>Your Tailored Roadmap</h1>
 
-    {% if steps %}
-        <ol class="roadmap-list">
-            {% for step in steps %}
-                <li>{{ step }}</li>
-            {% endfor %}
-        </ol>
-    {% else %}
-        <p>No roadmap generated yet. Complete profile first!</p>
-    {% endif %}
+<section class="roadmap-section">
+    <div class="roadmap-container">
+
+        <h1>Your Career Roadmap</h1>
+        <p class="roadmap-subtitle">
+            Follow these steps one by one. No rush. No noise. Just progress.
+        </p>
+
+        {% if steps %}
+            <ul class="roadmap-list">
+                {% for step in steps %}
+                    <li class="roadmap-step">
+                        <span class="step-number">{{ loop.index }}</span>
+                        <span class="step-text">{{ step }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="roadmap-empty">
+                No roadmap generated yet. Complete your profile to unlock it.
+            </p>
+        {% endif %}
+
+    </div>
 </section>
+
 {% endblock %}
