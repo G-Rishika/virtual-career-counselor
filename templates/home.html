@@ -4,6 +4,11 @@
 <section class="dashboard-hero">
     <h1>Hey {{ session.username }}, Welcome Back!</h1>
     <p>Your AI-assisted career dashboard</p>
+    <a href="{{ url_for('skill_gap') }}" class="dash-card">
+    <h3>🧩 Skill Gap Analyzer</h3>
+    <p>Know what you lack. Learn smarter.</p>
+</a>
+
 </section>
 
 <section class="user-overview">

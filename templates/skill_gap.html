@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="dashboard-hero">
+    <h1>🧩 Skill Gap Analyzer</h1>
+    <p>Let’s see what you know vs what you need</p>
+</section>
+
+<form method="POST" class="skill-form">
+
+    <label>Select Career Role</label>
+    <select name="role" required>
+        {% for role in skill_map %}
+            <option value="{{ role }}">{{ role.title() }}</option>
+        {% endfor %}
+    </select>
+
+    <h3>Skills You Already Know</h3>
+
+    {% for role, skills in skill_map.items() %}
+        <div class="skill-box">
+            <strong>{{ role.title() }}</strong>
+            {% for skill in skills %}
+                <label>
+                    <input type="checkbox" name="skills" value="{{ skill }}">
+                    {{ skill }}
+                </label>
+            {% endfor %}
+        </div>
+    {% endfor %}
+
+    <button type="submit" class="btn-primary">Analyze Skill Gap</button>
+</form>
+
+{% endblock %}

@@ -236,6 +236,59 @@ def roadmap():
     steps = generate_roadmap(data["career_goal"]) if data else []
     return render_template("roadmap.html", steps=steps)
 
+SKILL_MAP = {
+    "software developer": [
+        "Python",
+        "Data Structures",
+        "OOP",
+        "Git",
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "Flask / Django",
+        "SQL"
+    ],
+    "data scientist": [
+        "Python",
+        "Statistics",
+        "NumPy",
+        "Pandas",
+        "Data Visualization",
+        "SQL",
+        "Machine Learning",
+        "Model Evaluation"
+    ],
+    "ui ux designer": [
+        "Design Principles",
+        "Color Theory",
+        "Typography",
+        "Figma",
+        "Wireframing",
+        "User Research",
+        "Prototyping"
+    ]
+}
+
+@app.route("/skill-gap", methods=["GET", "POST"])
+def skill_gap():
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    if request.method == "POST":
+        role = request.form["role"]
+        known_skills = request.form.getlist("skills")
+
+        required_skills = SKILL_MAP.get(role, [])
+        missing_skills = [s for s in required_skills if s not in known_skills]
+
+        return render_template(
+            "skill_gap_result.html",
+            role=role,
+            known=known_skills,
+            missing=missing_skills
+        )
+
+    return render_template("skill_gap.html", skill_map=SKILL_MAP)
 
 @app.route("/projects")
 def projects():
