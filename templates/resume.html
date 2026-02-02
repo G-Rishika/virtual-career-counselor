@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="resume-section">
+
+    <h1>Resume Analyzer</h1>
+    <p class="muted">
+        Paste your resume text and get instant feedback to improve it.
+    </p>
+
+    <form method="POST" class="resume-form">
+
+        <label>Target Role</label>
+        <select name="role" required>
+            <option value="">Select role</option>
+            <option value="data scientist">Data Scientist</option>
+            <option value="web developer">Web Developer</option>
+            <option value="ai engineer">AI Engineer</option>
+        </select>
+
+        <label>Paste Resume Text</label>
+        <textarea
+            name="resume_text"
+            rows="10"
+            placeholder="Paste your resume content here..."
+            required
+        ></textarea>
+
+        <button type="submit" class="btn-primary">
+            Analyze Resume
+        </button>
+    </form>
+
+    {% if analysis %}
+    <div class="resume-result">
+
+        <h2>Resume Score: {{ analysis.score }}/100</h2>
+
+        <div class="result-grid">
+
+            <div class="card">
+                <h3>Strengths</h3>
+                <ul>
+                    {% for s in analysis.strengths %}
+                        <li>✅ {{ s }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>Missing Sections</h3>
+                <ul>
+                    {% for m in analysis.missing_sections %}
+                        <li>❌ {{ m }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>Missing Skills</h3>
+                <ul>
+                    {% for skill in analysis.missing_skills %}
+                        <li>⚠️ {{ skill }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+    {% endif %}
+
+</section>
+
+{% endblock %}

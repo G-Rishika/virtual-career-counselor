@@ -1,27 +1,31 @@
 {% extends "base.html" %}
 {% block content %}
 
-<section class="dashboard-hero">
-    <h1>Hey {{ session.username }}, Welcome Back!</h1>
-    <p>Your AI-assisted career dashboard</p>
-    <a href="{{ url_for('skill_gap') }}" class="dash-card">
-    <h3>🧩 Skill Gap Analyzer</h3>
-    <p>Know what you lack. Learn smarter.</p>
-</a>
-
-</section>
-
-<section class="user-overview">
-    <div class="card-grid">
-        <div class="card">
-            <h3>My Path</h3>
-            <p>Explore or generate your roadmap.</p>
+<div class="dashboard-page">
+    <section class="dashboard-hero">
+        <h1>Hey {{ session.username }}, Welcome Back!</h1>
+        <p>Your AI-assisted career dashboard</p>
+        
+        <div class="feature-launcher">
+            <a href="{{ url_for('skill_gap') }}" class="dash-card main-feature">
+                <h3>🧩 Skill Gap Analyzer</h3>
+                <p>Know what you lack. Learn smarter.</p>
+            </a>
         </div>
-        <div class="card">
-            <h3>My Projects</h3>
-            <p>Track learning goals and projects.</p>
+    </section>
+
+    <section class="user-overview">
+        <div class="card-grid">
+            <div class="card">
+                <h3>My Path</h3>
+                <p>Explore or generate your roadmap.</p>
+            </div>
+            <div class="card">
+                <h3>My Projects</h3>
+                <p>Track learning goals and projects.</p>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
+</div>
 
 {% endblock %}

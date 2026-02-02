@@ -385,6 +385,58 @@ def admin_create_project():
 
     return render_template("admin_create_project.html")
 
+@app.route("/resume", methods=["GET", "POST"])
+def resume():
+    analysis = None
+
+    if request.method == "POST":
+        resume_text = request.form.get("resume_text", "").lower()
+        target_role = request.form.get("role", "").lower()
+
+        score = 0
+        feedback = []
+        strengths = []
+        missing = []
+
+        # ---------- BASIC CHECKS ----------
+        sections = {
+            "education": ["education", "degree", "college", "university"],
+            "skills": ["skills", "technologies", "tools"],
+            "projects": ["project", "projects"],
+            "experience": ["experience", "internship", "work"]
+        }
+
+        for section, keywords in sections.items():
+            if any(k in resume_text for k in keywords):
+                score += 15
+                strengths.append(section.capitalize())
+            else:
+                missing.append(section.capitalize())
+
+        # ---------- SKILL GAP ----------
+        role_skills = {
+            "data scientist": ["python", "pandas", "numpy", "machine learning", "sql"],
+            "web developer": ["html", "css", "javascript", "react", "flask"],
+            "ai engineer": ["python", "machine learning", "deep learning", "tensorflow"]
+        }
+
+        required_skills = role_skills.get(target_role, [])
+        missing_skills = [s for s in required_skills if s not in resume_text]
+
+        score += max(0, 40 - len(missing_skills) * 8)
+
+        if score > 100:
+            score = 100
+
+        analysis = {
+            "score": score,
+            "strengths": strengths,
+            "missing_sections": missing,
+            "missing_skills": missing_skills
+        }
+
+    return render_template("resume.html", analysis=analysis)
+
 # -------------------- RUN --------------------
 if __name__ == "__main__":
     app.run(debug=True)

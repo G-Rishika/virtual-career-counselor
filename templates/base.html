@@ -18,7 +18,7 @@
         <a href="{{ url_for('index') }}">Home</a>
         <a href="{{ url_for('about') }}">About</a>
         <a href="{{ url_for('profile') }}">Career Path</a>
-
+        <a href="{{ url_for('resume') }}">Resume Analyzer</a>
         {% if session.username %}
             <a href="{{ url_for('home') }}" class="btn-outline">Dashboard</a>
             <a href="{{ url_for('logout') }}">Logout</a>
@@ -26,6 +26,7 @@
             <a href="{{ url_for('login') }}">Login</a>
             <a href="{{ url_for('signup') }}" class="btn-primary">Signup</a>
         {% endif %}
+
     </nav>
 </header>
 

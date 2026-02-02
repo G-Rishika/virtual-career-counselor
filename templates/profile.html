@@ -1,25 +1,36 @@
 {% extends "base.html" %}
 {% block content %}
 <section class="profile-page">
-    <h1>Your Profile</h1>
-    <form method="POST">
-        <label>Career Goal</label>
-        <input type="text" name="career_goal" value="{{ profile.career_goal or '' }}" required>
+    <div class="profile-card"> 
+        <h2>Choose Your Career Path</h2>
+        <form method="POST">
+            
+            <div class="form-row">
+                <label>Career Goal</label>
+                <input type="text" name="career_goal" value="{{ profile.career_goal or '' }}" required>
+            </div>
 
-        <label>Current Skill Level</label>
-        <select name="current_level" required>
-            <option {% if profile.current_level=='Beginner' %}selected{% endif %}>Beginner</option>
-            <option {% if profile.current_level=='Intermediate' %}selected{% endif %}>Intermediate</option>
-            <option {% if profile.current_level=='Advanced' %}selected{% endif %}>Advanced</option>
-        </select>
+            <div class="form-row">
+                <label>Current Skill Level</label>
+                <select name="current_level" required>
+                    <option {% if profile.current_level=='Beginner' %}selected{% endif %}>Beginner</option>
+                    <option {% if profile.current_level=='Intermediate' %}selected{% endif %}>Intermediate</option>
+                    <option {% if profile.current_level=='Advanced' %}selected{% endif %}>Advanced</option>
+                </select>
+            </div>
 
-        <label>Interests</label>
-        <input type="text" name="interests" value="{{ profile.interests or '' }}">
+            <div class="form-row">
+                <label>Interests</label>
+                <input type="text" name="interests" value="{{ profile.interests or '' }}">
+            </div>
 
-        <label>Hours per week</label>
-        <input type="number" name="time_per_week" value="{{ profile.time_per_week or '' }}" required>
+            <div class="form-row">
+                <label>Hours per week</label>
+                <input type="number" name="time_per_week" value="{{ profile.time_per_week or '' }}" required>
+            </div>
 
-        <button class="btn-primary">Save</button>
-    </form>
+            <button class="btn-primary">Save</button>
+        </form>
+    </div>
 </section>
 {% endblock %}

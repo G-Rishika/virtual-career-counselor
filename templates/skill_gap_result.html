@@ -1,41 +1,41 @@
 {% extends "base.html" %}
 {% block content %}
 
-<section class="dashboard-hero">
-    <h1>🎯 Skill Gap Result</h1>
-    <p>Target Role: <strong>{{ role.title() }}</strong></p>
-</section>
+<div class="tool-page-container">
+    <section class="dashboard-hero">
+        <h1>🎯 Skill Gap Result</h1>
+        <p>Target Role: <strong class="highlight">{{ role.title() }}</strong></p>
+    </section>
 
-<section class="result-grid">
+    <section class="result-grid">
+        <div class="result-card success">
+            <h3>✅ Skills You Have</h3>
+            <ul>
+                {% for s in known %}
+                    <li>{{ s }}</li>
+                {% else %}
+                    <li class="muted">No skills selected</li>
+                {% endfor %}
+            </ul>
+        </div>
 
-    <div class="result-card success">
-        <h3>✅ Skills You Have</h3>
-        <ul>
-            {% for s in known %}
-                <li>{{ s }}</li>
-            {% else %}
-                <li>No skills selected</li>
-            {% endfor %}
-        </ul>
-    </div>
+        <div class="result-card danger">
+            <h3>❌ Skills To Learn</h3>
+            <ul>
+                {% for s in missing %}
+                    <li>{{ s }}</li>
+                {% else %}
+                    <li class="glow-text">You’re fully aligned 🎉</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </section>
 
-    <div class="result-card danger">
-        <h3>❌ Skills To Learn</h3>
-        <ul>
-            {% for s in missing %}
-                <li>{{ s }}</li>
-            {% else %}
-                <li>You’re fully aligned 🎉</li>
-            {% endfor %}
-        </ul>
-    </div>
-
-</section>
-
-<section class="roadmap-action">
-    <a href="{{ url_for('roadmap') }}" class="btn-outline">
-        Generate Learning Roadmap →
-    </a>
-</section>
+    <section class="roadmap-action">
+        <a href="{{ url_for('roadmap') }}" class="btn-outline pulse-btn">
+            Generate Learning Roadmap →
+        </a>
+    </section>
+</div>
 
 {% endblock %}
