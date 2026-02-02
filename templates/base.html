@@ -17,10 +17,9 @@
     <nav>
         <a href="{{ url_for('index') }}">Home</a>
         <a href="{{ url_for('about') }}">About</a>
-        <a href="{{ url_for('profile') }}">Career Path</a>
-        <a href="{{ url_for('resume') }}">Resume Analyzer</a>
+        <a href="{{ url_for('career_quiz_page') }}" class="dashboard-card"> 🧠 Career Quiz</a>
+
         {% if session.username %}
-            <a href="{{ url_for('home') }}" class="btn-outline">Dashboard</a>
             <a href="{{ url_for('logout') }}">Logout</a>
         {% else %}
             <a href="{{ url_for('login') }}">Login</a>
@@ -31,7 +30,7 @@
 </header>
 
 <!-- ================= PAGE CONTENT ================= -->
-<main>
+<main class="page-enter">
     {% block content %}{% endblock %}
 </main>
 

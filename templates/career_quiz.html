@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="quiz-container">
+    <h2>🎯 Career Discovery Quiz</h2>
+    <p>Select ALL options that feel like you. No rules. Just honesty.</p>
+
+    <form method="POST">
+
+        {% for q in quiz %}
+        <div class="quiz-question">
+            <h4>{{ q.question }}</h4>
+
+            {% for option, value in q.options.items() %}
+            <label>
+                <input 
+                    type="checkbox" 
+                    name="q{{ loop.index }}[]" 
+                    value="{{ value }}">
+                {{ option }}
+            </label><br>
+
+            {% endfor %}
+        </div>
+        {% endfor %}
+
+        <button type="submit" class="btn-primary">Reveal My Career ✨</button>
+    </form>
+</section>
+
+{% endblock %}

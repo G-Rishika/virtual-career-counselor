@@ -437,6 +437,139 @@ def resume():
 
     return render_template("resume.html", analysis=analysis)
 
+
+# ================= CAREER QUIZ ================= #
+
+career_quiz = [
+    {
+        "question": "Do you enjoy logic or creativity more?",
+        "options": {
+            "Logic & problem solving": "developer",
+            "Data & patterns": "data_scientist",
+            "Creativity & design": "designer",
+            "Security & investigation": "cybersecurity",
+            "Planning & leadership": "product_manager"
+        }
+    },
+    {
+        "question": "How do you like to work?",
+        "options": {
+            "Independently with code": "developer",
+            "Analyzing data deeply": "data_scientist",
+            "Designing user experiences": "designer",
+            "Protecting systems": "cybersecurity",
+            "Coordinating teams": "product_manager"
+        }
+    },
+    {
+        "question": "Which tool excites you most?",
+        "options": {
+            "VS Code": "developer",
+            "Python & Pandas": "data_scientist",
+            "Figma": "designer",
+            "Firewalls & Networks": "cybersecurity",
+            "Roadmaps & Strategy": "product_manager"
+        }
+    }
+]
+
+@app.route("/career-quiz", methods=["GET", "POST"])
+def career_quiz_page():
+    if request.method == "POST":
+        scores = {
+            "developer": 0,
+            "data_scientist": 0,
+            "designer": 0,
+            "cybersecurity": 0,
+            "product_manager": 0
+        }
+
+        for answers in request.form.lists():
+            for selected in answers[1]:
+                scores[selected] += 1
+
+        top_careers = sorted(scores, key=scores.get, reverse=True)[:3]
+
+        career_names = {
+            "developer": "Software Developer",
+            "data_scientist": "Data Scientist",
+            "designer": "UI/UX Designer",
+            "cybersecurity": "Cybersecurity Analyst",
+            "product_manager": "Product Manager"
+        }
+
+        personality = {
+            "developer": "You love logic, structure, and building things from scratch.",
+            "data_scientist": "You enjoy patterns, insights, and data-driven decisions.",
+            "designer": "You’re creative, user-focused, and visually expressive.",
+            "cybersecurity": "You think like a protector and love challenges.",
+            "product_manager": "You’re a planner, leader, and big-picture thinker."
+        }
+
+        return render_template(
+            "quiz_result.html",
+            careers=[career_names[c] for c in top_careers],
+            insight=personality[top_careers[0]]
+        )
+
+    return render_template("career_quiz.html", quiz=career_quiz)
+
+# ================= INTERSHIP & PROJECTS RECOMMENDATION ================= #
+
+CAREER_RECOMMENDATIONS = {
+    "Data Analyst": {
+        "internships": [
+            "Data Analysis Internship",
+            "Business Intelligence Intern",
+            "Excel & SQL Intern"
+        ],
+        "projects": [
+            "Sales Data Dashboard",
+            "Customer Churn Analysis",
+            "COVID Data Visualization"
+        ]
+    },
+    "Software Developer": {
+        "internships": [
+            "Python Developer Intern",
+            "Web Developer Intern",
+            "Backend Developer Intern"
+        ],
+        "projects": [
+            "Flask Web App",
+            "Task Manager App",
+            "REST API using Python"
+        ]
+    },
+    "Machine Learning Engineer": {
+        "internships": [
+            "ML Internship",
+            "AI Research Intern",
+            "Data Science Intern"
+        ],
+        "projects": [
+            "Spam Email Classifier",
+            "Face Recognition System",
+            "Movie Recommendation System"
+        ]
+    }
+}
+
+@app.route("/recommendations")
+def recommendations():
+    # For now, assume quiz result is stored in session
+    career = session.get("quiz_result", "Data Analyst")
+
+    data = CAREER_RECOMMENDATIONS.get(career)
+
+    return render_template(
+        "recommendations.html",
+        career=career,
+        internships=data["internships"],
+        projects=data["projects"]
+    )
+
+
 # -------------------- RUN --------------------
 if __name__ == "__main__":
     app.run(debug=True)

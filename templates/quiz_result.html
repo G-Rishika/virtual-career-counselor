@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="result-container">
+    <h2>✨ Your Career Matches</h2>
+
+<div class="matches-grid">
+    <ol>
+        {% for career in careers %}
+        <li class="career-item">
+            <span class="rank-badge">#{{ loop.index }}</span> {{ career }}
+        </li>
+        {% endfor %}
+    </ol>
+</div>
+
+    <p class="personality-box">
+        {{ insight }}
+    </p>
+
+    <a href="/career-quiz" class="btn-primary">Try Again 🔁</a>
+</section>
+
+{% endblock %}

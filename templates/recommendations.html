@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="dashboard-container">
+    <h2>🎯 Recommended for You</h2>
+    <p>Based on your quiz result: <strong>{{ career }}</strong></p>
+
+    <div class="card-grid">
+
+        <div class="card">
+            <h3>💼 Internships</h3>
+            <ul>
+                {% for item in internships %}
+                <li>{{ item }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="card">
+            <h3>🛠️ Projects</h3>
+            <ul>
+                {% for item in projects %}
+                <li>{{ item }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

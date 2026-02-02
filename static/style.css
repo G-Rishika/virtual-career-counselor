@@ -258,100 +258,6 @@ footer {
     color: var(--text-muted);
 }
 
-/* ================= CHATBOT (UNCHANGED, JUST MATCHED THEME) ================= */
-#chatbot-container {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    z-index: 9999;
-}
-
-#chatbot-button {
-    width: 60px;
-    height: 60px;
-    background: linear-gradient(135deg, var(--orange-main), var(--orange-dark));
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 26px;
-    cursor: pointer;
-    box-shadow: 0 12px 30px rgba(255,106,0,0.5);
-}
-
-#chatbot-box {
-    width: 340px;
-    height: 420px;
-    background: #0b0b10;
-    border-radius: 18px;
-    box-shadow: 0 25px 60px rgba(0,0,0,0.8);
-    display: none;
-    flex-direction: column;
-    overflow: hidden;
-}
-
-.chatbot-header {
-    background: linear-gradient(135deg, var(--orange-main), var(--orange-dark));
-    color: white;
-    padding: 14px 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-weight: 600;
-}
-
-#chatbot-messages {
-    flex: 1;
-    padding: 14px;
-    overflow-y: auto;
-    background: #050507;
-}
-
-.user-message {
-    align-self: flex-end;
-    background: var(--orange-main);
-    color: white;
-    padding: 10px 14px;
-    border-radius: 14px 14px 0 14px;
-    margin-bottom: 10px;
-    max-width: 80%;
-}
-
-.bot-message {
-    align-self: flex-start;
-    background: #111;
-    color: #e5e7eb;
-    padding: 10px 14px;
-    border-radius: 14px 14px 14px 0;
-    margin-bottom: 10px;
-    max-width: 80%;
-}
-
-#chatbot-form {
-    display: flex;
-    padding: 10px;
-    border-top: 1px solid #222;
-}
-
-#chatbot-input {
-    flex: 1;
-    padding: 10px 14px;
-    border-radius: 10px;
-    border: 1px solid #333;
-    background: #0b0b10;
-    color: white;
-}
-
-#chatbot-form button {
-    background: var(--orange-main);
-    border: none;
-    color: white;
-    padding: 0 18px;
-    margin-left: 8px;
-    border-radius: 10px;
-    cursor: pointer;
-}
-
 /* ================= PROFILE PAGE ================= */
 
 .profile-page {
@@ -622,25 +528,65 @@ footer {
 
 /* 2. Skill Gap Analyzer Card (The big one) */
 .feature-launcher {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 40px;
+    display: grid;
+    /* This creates three equal columns */
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 20px;
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto 40px auto;
 }
 
 .dash-card.main-feature {
-    background: rgba(255, 106, 0, 0.1);
-    border: 1px solid var(--orange-main);
-    padding: 30px;
+    background: rgba(255, 106, 0, 0.05); /* Subtle transparent orange */
+    border: 1px solid rgba(248, 107, 6, 0.4);
+    padding: 30px 20px;
     border-radius: 20px;
     text-decoration: none;
     transition: all 0.3s ease;
-    display: block;
-    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 180px;
+}
+
+.dash-card h3, .main-feature h3 {
+    /* Create the gradient: starts White, ends Orange */
+    background: linear-gradient(135deg, #ffffff 30%, #ff6a00 100%);
+    
+    /* This "clips" the background to the shape of the letters */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    
+    /* Ensure it stands out */
+    font-weight: 800;
+    display: inline-block;
+}
+
+.dash-card h3 {
+    background: linear-gradient(135deg, #ffffff 40%, #ff6a00 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    
+    /* Adds a soft orange glow behind the white/orange text */
+    filter: drop-shadow(0 0 8px rgba(255, 106, 0, 0.3));
+}
+
+/* Ensure the text inside stays centered and legible */
+.dash-card.main-feature h3 {
+    margin: 10px 0;
+    font-size: 1.25rem;
+}
+
+.dash-card.main-feature p {
+    font-size: 0.95rem;
+    color: var(--text-muted);
 }
 
 .dash-card.main-feature:hover {
     background: rgba(255, 106, 0, 0.2);
-    box-shadow: 0 0 30px rgba(255, 106, 0, 0.3);
+    box-shadow: 0 0 30px rgba(242, 121, 34, 0.3);
     transform: translateY(-5px);
 }
 
@@ -1069,3 +1015,246 @@ footer {
 
 .result-card ul { list-style: none; margin-top: 15px; }
 .result-card li { margin-bottom: 8px; color: var(--text-main); }
+
+/* ================= PAGE LOAD ANIMATION ================= */
+
+.page-enter > * {
+    opacity: 0;
+    animation: fadeUp 0.9s ease forwards;
+}
+
+.page-enter > *:nth-child(1) { animation-delay: 0.05s; }
+.page-enter > *:nth-child(2) { animation-delay: 0.15s; }
+.page-enter > *:nth-child(3) { animation-delay: 0.25s; }
+.page-enter > *:nth-child(4) { animation-delay: 0.35s; }
+.page-enter > *:nth-child(5) { animation-delay: 0.45s; }
+
+/* ================= NEW CAREER QUIZ STYLING ================= */
+
+.quiz-container {
+    max-width: 850px;
+    margin: 50px auto;
+    padding: 60px;
+    /* Soft Glassmorphism Effect */
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+    border-radius: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Add a subtle decorative glow behind the quiz */
+.quiz-container::before {
+    content: "";
+    position: absolute;
+    top: -100px;
+    right: -100px;
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle, rgba(255, 106, 0, 0.15) 0%, transparent 70%);
+    z-index: -1;
+}
+
+.quiz-container h2 {
+    font-size: 2.8rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+    background: linear-gradient(90deg, #fff, var(--orange-main));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 50px;
+}
+
+.quiz-question {
+    margin-bottom: 45px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.quiz-question h4 {
+    font-size: 1.4rem;
+    color: #efefef;
+    margin-bottom: 25px;
+    /* Remove the bulky left border for a cleaner look */
+    border-left: none;
+    padding-left: 0;
+}
+
+/* 3. New "Minimalist Card" Style for Options */
+.quiz-question label {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 20px 25px;
+    margin-bottom: 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: #bbb;
+}
+
+.quiz-question label:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(255, 106, 0, 0.5);
+    color: #fff;
+    transform: translateY(-3px); /* Lift up instead of sliding right */
+}
+
+/* 4. Active Selection State */
+.quiz-question label:has(input[type="radio"]:checked) {
+    background: rgba(255, 106, 0, 0.1);
+    border-color: var(--orange-main);
+    color: #fff;
+    box-shadow: 0 10px 20px rgba(255, 106, 0, 0.15);
+}
+
+/* 5. Custom Radio "Ring" Style */
+.quiz-question input[type="radio"] {
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    margin-right: 20px;
+    display: grid;
+    place-items: center;
+    transition: all 0.2s ease;
+}
+
+.quiz-question input[type="radio"]::before {
+    content: "";
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--orange-main);
+    transform: scale(0);
+    transition: 0.2s transform ease-in-out;
+    box-shadow: 0 0 10px var(--orange-main);
+}
+
+.quiz-question input[type="radio"]:checked {
+    border-color: var(--orange-main);
+}
+
+.quiz-question input[type="radio"]:checked::before {
+    transform: scale(1);
+}
+
+/* 6. High-Contrast Submit Button */
+.quiz-container button[type="submit"] {
+    width: 100%;
+    background: var(--orange-main);
+    color: #fff;
+    border: none;
+    padding: 20px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 15px 30px rgba(255, 106, 0, 0.3);
+    margin-top: 20px;
+}
+
+.quiz-container button[type="submit"]:hover {
+    background: #ff8533;
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(255, 106, 0, 0.4);
+}
+
+/* ================= QUIZ RESULTS STYLING ================= */
+
+.result-container {
+    max-width: 750px;
+    margin: 60px auto;
+    padding: 50px;
+    background: rgba(10, 10, 15, 0.85);
+    border-radius: 30px;
+    border: 1px solid rgba(255, 106, 0, 0.3);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 106, 0, 0.1);
+    text-align: center;
+    backdrop-filter: blur(15px);
+    
+    /* ADD 'forwards' HERE */
+    animation: fadeUp 0.8s ease-out forwards; 
+    
+    /* Safety measure: ensure it starts visible if animation fails */
+    opacity: 1; 
+}
+
+.result-container h2 {
+    font-size: 2.5rem;
+    color: var(--orange-main);
+    margin-bottom: 30px;
+    text-shadow: 0 0 15px rgba(255, 106, 0, 0.4);
+}
+
+/* Styled Career List */
+.result-container ol {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.result-container li {
+    background: linear-gradient(90deg, rgba(255, 106, 0, 0.15), transparent);
+    border: 1px solid rgba(255, 106, 0, 0.2);
+    padding: 18px 25px;
+    border-radius: 15px;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: white;
+    transition: transform 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.result-container li::before {
+    content: "🚀";
+    margin-right: 15px;
+}
+
+.result-container li:hover {
+    transform: scale(1.03);
+    border-color: var(--orange-main);
+    background: linear-gradient(90deg, rgba(255, 106, 0, 0.25), transparent);
+}
+
+/* Personality Insight Box */
+.personality-box {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    padding: 25px;
+    margin: 30px 0;
+    line-height: 1.7;
+    color: var(--text-muted);
+    font-style: italic;
+    border-left: 5px solid var(--orange-main);
+}
+
+/* Action Button */
+.result-container .btn-primary {
+    display: inline-block;
+    text-decoration: none;
+    margin-top: 20px;
+    padding: 15px 40px;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+}
+
+.rank-badge {
+    background: var(--orange-main);
+    color: white;
+    font-size: 0.8rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin-right: 15px;
+    box-shadow: 0 0 10px rgba(255, 106, 0, 0.5);
+}
