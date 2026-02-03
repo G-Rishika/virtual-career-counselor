@@ -569,6 +569,74 @@ def recommendations():
         projects=data["projects"]
     )
 
+import random
+
+CAREER_TIPS = [
+    {
+        "tip": "Build projects, not just certificates.",
+        "quote": "Your degree doesn’t define you. Your skills do."
+    },
+    {
+        "tip": "Consistency beats talent when talent sleeps.",
+        "quote": "Small steps every day lead to big wins."
+    },
+    {
+        "tip": "Learn one new skill deeply instead of ten superficially.",
+        "quote": "Depth creates confidence."
+    },
+    {
+        "tip": "Your first project won’t be perfect — and that’s okay.",
+        "quote": "Progress > Perfection."
+    },
+    {
+        "tip": "Real learning starts when tutorials end.",
+        "quote": "Struggle is a sign you’re growing."
+    }
+]
+
+@app.context_processor
+def inject_daily_tip():
+    return {
+        "daily_tip": random.choice(CAREER_TIPS)
+    }
+
+@app.route("/skill-confidence", methods=["GET", "POST"])
+def skill_confidence():
+    skills = [
+        "Python",
+        "Data Structures",
+        "SQL",
+        "HTML/CSS",
+        "JavaScript",
+        "Machine Learning",
+        "Communication",
+        "Problem Solving"
+    ]
+
+    results = []
+
+    if request.method == "POST":
+        for skill in skills:
+            level = request.form.get(skill)
+
+            score_map = {
+                "Beginner": 33,
+                "Intermediate": 66,
+                "Confident": 100
+            }
+
+            score = score_map.get(level, 0)
+
+            results.append({
+                "skill": skill,
+                "level": level,
+                "score": score,
+                "weak": score <= 33
+            })
+
+        return render_template("skill_confidence_result.html", results=results)
+
+    return render_template("skill_confidence.html", skills=skills)
 
 # -------------------- RUN --------------------
 if __name__ == "__main__":

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>📊 Your Skill Confidence Snapshot</h2>
+<p>Awareness beats overconfidence. Respect.</p>
+
+<div class="confidence-results">
+
+    {% for item in results %}
+    <div class="confidence-card">
+
+        <div class="skill-header">
+            <strong>{{ item.skill }}</strong>
+            <span>{{ item.level }}</span>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill"
+                 data-score="{{ item.score }}"
+                 data-weak="{{ 'yes' if item.weak else 'no' }}">
+            </div>
+        </div>
+
+        {% if item.weak %}
+        <p class="weak-text">⚠ Needs focus</p>
+        {% endif %}
+
+    </div>
+    {% endfor %}
+
+</div>
+
+<a href="{{ url_for('skill_confidence') }}" class="btn-secondary">
+    Re-evaluate
+</a>
+
+{% endblock %}

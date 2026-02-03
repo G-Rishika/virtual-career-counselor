@@ -29,6 +29,12 @@
     </nav>
 </header>
 
+<!-- ================= DAILY CAREER TIP ================= -->
+<div class="daily-tip">
+    <p class="tip-text">💡 {{ daily_tip.tip }}</p>
+    <p class="quote-text">“{{ daily_tip.quote }}”</p>
+</div>
+
 <!-- ================= PAGE CONTENT ================= -->
 <main class="page-enter">
     {% block content %}{% endblock %}
