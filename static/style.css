@@ -1661,3 +1661,383 @@ footer {
     display: inline-block;
     margin-bottom: 10px;
 }
+
+/* ================= ADMIN COMMAND CENTER STYLES ================= */
+
+/* 1. Admin Home & Dashboard Grid */
+.admin-home, .dashboard-container {
+    max-width: 1000px;
+    margin: 50px auto;
+    padding: 20px;
+    text-align: center;
+}
+
+.admin-home h1, .dashboard-container h1 {
+    font-size: 2.5rem;
+    background: linear-gradient(135deg, #ffffff 30%, #ff6a00 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 40px;
+}
+
+.admin-grid, .dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 25px;
+    margin-top: 30px;
+}
+
+/* 2. Admin Cards */
+.admin-card, .dashboard-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 106, 0, 0.1);
+    padding: 30px 20px;
+    border-radius: 20px;
+    text-decoration: none;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+.admin-card span {
+    font-size: 0.85rem;
+    color: #888;
+    margin-top: 10px;
+    font-weight: 400;
+}
+
+.admin-card:hover, .dashboard-card:hover {
+    background: rgba(255, 106, 0, 0.05);
+    border-color: #ff6a00;
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 0 0 15px rgba(255, 106, 0, 0.1);
+}
+
+.admin-card.danger, .dashboard-card.danger {
+    border-color: rgba(255, 77, 77, 0.2);
+}
+
+.admin-card.danger:hover {
+    border-color: #ff4d4d;
+    background: rgba(255, 77, 77, 0.05);
+}
+
+/* 3. Admin User Table */
+.admin-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px; /* Gives a "card row" look */
+    margin-top: 30px;
+}
+
+.admin-table th {
+    color: #ff6a00;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    padding: 15px;
+    text-align: left;
+}
+
+.admin-table tr {
+    background: rgba(255, 255, 255, 0.02);
+    transition: 0.3s;
+}
+
+.admin-table td {
+    padding: 20px 15px;
+    color: #ddd;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.admin-table tr:hover {
+    background: rgba(255, 106, 0, 0.05);
+}
+
+/* 4. Admin Forms (Login/Signup/Create Project) */
+.form-box, .auth-container form {
+    max-width: 450px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.02);
+    padding: 40px;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.form-box input, .form-box textarea, .auth-container input {
+    width: 100%;
+    background: #111;
+    border: 1px solid #333;
+    color: white;
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.form-box input:focus {
+    border-color: #ff6a00;
+    outline: none;
+}
+
+/* ================= ADMIN COMMAND CENTER ================= */
+
+/* 1. Main Layout & Typography */
+.admin-home, .dashboard-container {
+    max-width: 1100px;
+    margin: 50px auto;
+    padding: 20px;
+    text-align: center;
+}
+
+.admin-home h1 {
+    font-size: 2.8rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #ffffff 30%, #ff6a00 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 10px;
+}
+
+/* 2. Admin Action Grid */
+.admin-grid, .dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 25px;
+    margin-top: 40px;
+}
+
+/* 3. Glassmorphism Cards */
+.admin-card, .dashboard-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 106, 0, 0.1);
+    padding: 40px 25px;
+    border-radius: 24px;
+    text-decoration: none;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    backdrop-filter: blur(10px);
+}
+
+.admin-card span {
+    font-size: 0.85rem;
+    color: #888;
+    margin-top: 12px;
+    font-weight: 400;
+}
+
+.admin-card:hover, .dashboard-card:hover {
+    transform: translateY(-12px);
+    background: rgba(255, 106, 0, 0.05);
+    border-color: #ff6a00;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 106, 0, 0.1);
+}
+
+/* Special Danger/Logout Card */
+.admin-card.danger {
+    border-color: rgba(255, 77, 77, 0.2);
+}
+
+.admin-card.danger:hover {
+    border-color: #ff4d4d;
+    background: rgba(255, 77, 77, 0.05);
+    box-shadow: 0 10px 30px rgba(255, 77, 77, 0.1);
+}
+
+/* 4. Elegant Data Table (Manage Users) */
+.admin-table-container {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 20px;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    margin-top: 30px;
+    overflow: hidden;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-table th {
+    text-align: left;
+    padding: 15px;
+    color: #ff6a00;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admin-table td {
+    padding: 20px 15px;
+    color: #ddd;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.admin-table tr:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+/* 5. Admin Form Styling (Login/Signup/Create) */
+.admin-form-box {
+    max-width: 450px;
+    margin: 60px auto;
+    padding: 40px;
+    background: rgba(10, 10, 15, 0.9);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 106, 0, 0.2);
+}
+
+.admin-form-box input, .admin-form-box textarea {
+    width: 100%;
+    background: #111;
+    border: 1px solid #333;
+    color: white;
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    font-family: inherit;
+}
+
+.admin-form-box input:focus {
+    border-color: #ff6a00;
+    outline: none;
+    box-shadow: 0 0 10px rgba(255, 106, 0, 0.2);
+}
+
+/* ================= ADMIN COMMAND CENTER ================= */
+
+/* 1. Main Layout & Typography */
+.admin-home, .dashboard-container {
+    max-width: 1100px;
+    margin: 50px auto;
+    padding: 20px;
+    text-align: center;
+}
+
+.admin-home h1 {
+    font-size: 2.8rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #ffffff 30%, #ff6a00 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 10px;
+}
+
+/* 2. Admin Action Grid */
+.admin-grid, .dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 25px;
+    margin-top: 40px;
+}
+
+/* 3. Glassmorphism Cards */
+.admin-card, .dashboard-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 106, 0, 0.1);
+    padding: 40px 25px;
+    border-radius: 24px;
+    text-decoration: none;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    backdrop-filter: blur(10px);
+}
+
+.admin-card span {
+    font-size: 0.85rem;
+    color: #888;
+    margin-top: 12px;
+    font-weight: 400;
+}
+
+.admin-card:hover, .dashboard-card:hover {
+    transform: translateY(-12px);
+    background: rgba(255, 106, 0, 0.05);
+    border-color: #ff6a00;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 106, 0, 0.1);
+}
+
+/* Special Danger/Logout Card */
+.admin-card.danger {
+    border-color: rgba(255, 77, 77, 0.2);
+}
+
+.admin-card.danger:hover {
+    border-color: #ff4d4d;
+    background: rgba(255, 77, 77, 0.05);
+    box-shadow: 0 10px 30px rgba(255, 77, 77, 0.1);
+}
+
+/* 4. Elegant Data Table (Manage Users) */
+.admin-table-container {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 20px;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    margin-top: 30px;
+    overflow: hidden;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-table th {
+    text-align: left;
+    padding: 15px;
+    color: #ff6a00;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admin-table td {
+    padding: 20px 15px;
+    color: #ddd;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.admin-table tr:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+/* 5. Admin Form Styling (Login/Signup/Create) */
+.admin-form-box {
+    max-width: 450px;
+    margin: 60px auto;
+    padding: 40px;
+    background: rgba(10, 10, 15, 0.9);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 106, 0, 0.2);
+}
+
+.admin-form-box input, .admin-form-box textarea {
+    width: 100%;
+    background: #111;
+    border: 1px solid #333;
+    color: white;
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    font-family: inherit;
+}
+
+.admin-form-box input:focus {
+    border-color: #ff6a00;
+    outline: none;
+    box-shadow: 0 0 10px rgba(255, 106, 0, 0.2);
+}

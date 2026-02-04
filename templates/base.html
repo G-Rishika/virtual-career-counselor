@@ -17,7 +17,6 @@
     <nav>
         <a href="{{ url_for('index') }}">Home</a>
         <a href="{{ url_for('about') }}">About</a>
-        <a href="{{ url_for('admin_login') }}">Admin</a>
 
         {% if session.username %}
             <a href="{{ url_for('logout') }}">Logout</a>
