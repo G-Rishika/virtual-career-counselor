@@ -61,7 +61,8 @@ def init_db():
 init_db()
 
 
-# -------------------- ROADMAP LOGIC --------------------
+# ================= ROADMAP ================= #
+
 ROADMAPS = {
     "software developer": [
         "Learn Python or Java basics",
@@ -108,7 +109,8 @@ def generate_roadmap(goal):
     ]
 
 
-# -------------------- CHATBOT LOGIC --------------------
+# ================= CHATBOT ================= #
+
 def chatbot_reply(msg):
     msg = msg.lower()
 
