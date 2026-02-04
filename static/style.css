@@ -1289,51 +1289,375 @@ footer {
     to { opacity: 1; transform: translateY(0); }
 }
 
+/* ================= SKILL CONFIDENCE METER ================= */
+
+/* 1. Main Container: Centers everything and adds the glass effect */
 .confidence-form {
-    max-width: 500px;
-    margin: auto;
+    max-width: 700px;
+    margin: 60px auto;
+    padding: 45px;
+    background: rgba(10, 10, 15, 0.85); /* Deep dark background */
+    border-radius: 24px;
+    border: 1px solid rgba(255, 106, 0, 0.2); /* Subtle orange border */
+    backdrop-filter: blur(15px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 
+                0 0 20px rgba(255, 106, 0, 0.05);
+    text-align: left;
 }
 
+/* 2. Header Text Styling */
+.confidence-form h2 {
+    font-size: 2rem;
+    color: #ffffff;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.confidence-form p.description {
+    color: var(--text-muted);
+    margin-bottom: 35px;
+    font-size: 1rem;
+}
+
+/* 3. Skill Row Layout */
 .skill-row {
-    margin-bottom: 15px;
+    margin-bottom: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .skill-row label {
-    display: block;
     font-weight: 600;
-    margin-bottom: 5px;
+    color: #efefef;
+    font-size: 1.05rem;
+    letter-spacing: 0.5px;
 }
 
+/* 4. The Dropdowns (Select Boxes) */
 .skill-row select {
     width: 100%;
-    padding: 8px;
+    padding: 14px 18px;
+    background: #16161d;
+    border: 1px solid #333;
+    border-radius: 12px;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    appearance: none; /* Removes default browser arrow */
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='orange' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 18px;
 }
 
-.confidence-card {
+/* 5. Dropdown Hover & Focus Glow */
+.skill-row select:hover {
+    border-color: rgba(255, 106, 0, 0.5);
+    background-color: #1c1c24;
+}
+
+.skill-row select:focus {
+    outline: none;
+    border-color: var(--orange-main);
+    box-shadow: 0 0 15px rgba(255, 106, 0, 0.2);
+}
+
+/* 6. The "Analyze Confidence" Button */
+.btn-submit-container {
+    margin-top: 40px;
+    text-align: center;
+}
+
+.confidence-form button {
+    width: 100%;
+    padding: 16px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--orange-main), var(--orange-dark));
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 20px rgba(255, 106, 0, 0.2);
+}
+
+.confidence-form button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(255, 106, 0, 0.4);
+    filter: brightness(1.1);
+}
+
+/* 7. Responsive Fix */
+@media (max-width: 768px) {
+    .confidence-form {
+        margin: 20px;
+        padding: 25px;
+    }
+}
+
+/* ================= SKILL CONFIDENCE RESULTS ================= */
+
+.result-page-container {
+    max-width: 600px; /* Narrower container for vertical elegance */
+    margin: 50px auto;
+    padding: 40px;
+    background: rgba(10, 10, 15, 0.95);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 106, 0, 0.2);
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
+}
+
+/* 1. Centered White-to-Orange Heading */
+.result-page-container h2 {
+    text-align: center;
+    display: block;
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 40px;
+    background: linear-gradient(135deg, #ffffff 30%, #ff6a00 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* 2. Vertical Stack Container */
+.results-list {
+    display: flex;
+    flex-direction: column; /* Forces vertical orientation */
+    gap: 20px; /* Clean spacing between rows */
+}
+
+/* 3. Horizontal Skill Card (Pie on left, Text on right) */
+.skill-card {
+    display: flex;
+    flex-direction: row; /* Content inside the card stays horizontal */
+    align-items: center;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 20px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.skill-card:hover {
+    border-color: rgba(255, 106, 0, 0.4);
+    transform: translateX(5px); /* Subtle slide-in effect */
+}
+
+/* 4. Compact Pie Chart */
+.progress-circle {
+    --percentage: 0; 
+    width: 70px; /* Smaller for list view */
+    height: 70px;
+    flex-shrink: 0; /* Prevents circle from squishing */
+    border-radius: 50%;
+    background: conic-gradient(
+        #ff6a00 calc(var(--percentage) * 1%),
+        rgba(255, 255, 255, 0.1) 0
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 25px;
+}
+
+.progress-circle::after {
+    content: attr(data-value);
+    width: 58px;
+    height: 58px;
+    background: #0d0d12;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+/* 5. Text Information Column */
+.skill-info {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.skill-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 4px;
+}
+
+.level-badge {
+    width: fit-content;
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    background: rgba(255, 106, 0, 0.15);
+    color: #ff6a00;
+    border-radius: 4px;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+/* 6. Skill Info (Aligned underneath) */
+.skill-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 6px;
+}
+
+.level-badge {
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    background: rgba(255, 106, 0, 0.1);
+    color: #ff6a00;
+    border: 1px solid rgba(255, 106, 0, 0.3);
+    text-transform: uppercase;
+}
+
+/* 7. Needs Focus Warning (Stays inside the card) */
+.focus-warning {
+    color: #ff4d4d;
+    font-size: 0.75rem;
+    margin-top: 10px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* ================= PORTAL SELECTION STYLE ================= */
+
+.portal-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    padding: 60px 20px;
+    min-height: 80vh;
+}
+
+.portal-card {
+    flex: 1;
+    max-width: 380px;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    backdrop-filter: blur(10px);
+}
+
+/* Elevate the Admin card with a subtle orange glow */
+.admin-portal {
+    border-color: rgba(255, 106, 0, 0.2);
+}
+
+.portal-card:hover {
+    transform: translateY(-10px);
+    background: rgba(255, 255, 255, 0.06);
+    border-color: #ff6a00;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 106, 0, 0.1);
+}
+
+.portal-icon {
+    font-size: 3rem;
     margin-bottom: 20px;
 }
 
-.skill-header {
+.portal-card h3 {
+    font-size: 1.5rem;
+    color: #fff;
+    margin-bottom: 15px;
+}
+
+.portal-card p {
+    color: #a0a0a0;
+    font-size: 0.9rem;
+    margin-bottom: 30px;
+    line-height: 1.5;
+}
+
+/* Portal Buttons */
+.btn-portal {
+    display: block;
+    padding: 14px;
+    background: #fff;
+    color: #000;
+    text-decoration: none;
+    border-radius: 12px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    transition: 0.3s;
+}
+
+.admin-btn {
+    background: linear-gradient(135deg, #ff6a00, #ee0979);
+    color: #fff;
+}
+
+.btn-portal:hover {
+    letter-spacing: 1px;
+    filter: brightness(1.1);
+}
+
+.link-sub {
+    color: #666;
+    font-size: 0.8rem;
+    text-decoration: none;
+}
+
+.link-sub:hover {
+    color: #ff6a00;
+}
+
+/* The "OR" Divider */
+.portal-divider {
+    position: relative;
+    color: #444;
+    font-weight: 800;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .portal-container {
+        flex-direction: column;
+    }
+}
+
+/* Center the portal container within the hero section */
+.hero .portal-container {
+    margin-top: 50px;
     display: flex;
-    justify-content: space-between;
-    margin-bottom: 5px;
+    justify-content: center;
+    align-items: stretch; /* Makes both cards same height */
+    gap: 20px;
 }
 
-.progress-bar {
-    width: 100%;
-    background: #ddd;
-    height: 10px;
-    border-radius: 5px;
-    overflow: hidden;
+/* Style the 'OR' divider for a dark background */
+.portal-divider {
+    display: flex;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.3);
+    font-weight: bold;
 }
 
-.progress-fill {
-    height: 100%;
-    transition: width 0.4s ease;
-}
-
-.weak-text {
-    color: crimson;
-    font-size: 0.9em;
-    margin-top: 5px;
+/* Ensure portal buttons don't look like plain text */
+.btn-portal {
+    background: var(--orange-main);
+    color: white !important;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 10px;
 }

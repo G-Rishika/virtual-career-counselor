@@ -32,6 +32,17 @@
                 <p>Personalized opportunities based on your skills.</p>
             </a>
 
+            <a href="{{ url_for('skill_confidence') }}" class="dash-card main-feature">
+                <h3>🎯 Skill Confidence Meter</h3>
+                <p>Track your progress in key skills.</p>
+            </a>
+
+            {% if session.admin %}
+            <a href="{{ url_for('admin_home') }}" class="dash-card main-feature">
+                <h3>🛠 Admin Panel</h3>
+                <p>System management</p>
+            </a>
+            {% endif %}
 
         </div>
     </section>

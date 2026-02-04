@@ -17,7 +17,7 @@
     <nav>
         <a href="{{ url_for('index') }}">Home</a>
         <a href="{{ url_for('about') }}">About</a>
-        <a href="{{ url_for('career_quiz_page') }}" class="dashboard-card"> 🧠 Career Quiz</a>
+        <a href="{{ url_for('admin_login') }}">Admin</a>
 
         {% if session.username %}
             <a href="{{ url_for('logout') }}">Logout</a>
@@ -26,8 +26,46 @@
             <a href="{{ url_for('signup') }}" class="btn-primary">Signup</a>
         {% endif %}
 
+        {% if session.username %}
+            <a href="{{ url_for('admin_login') }}">Admin Login</a>
+            <a href="{{ url_for('admin_signup') }}" class="btn-primary"> AdminSignup</a>
+        {% endif %}
+
+        {% if session.admin %}
+            <a href="{{ url_for('admin_home') }}">🛠 Admin</a>
+        {% endif %}
+
     </nav>
 </header>
+
+<!-- ================= SKILL CONFIDENCE METER ================= -->
+{% if confidence_preview %}
+<div class="confidence-preview">
+
+    <h3>🎯 Skill Confidence Meter</h3>
+    <p class="confidence-subtext">Quick self-check. No judgment.</p>
+
+    {% for item in confidence_preview %}
+    <div class="confidence-row">
+
+        <span class="skill-name">{{ item.skill }}</span>
+
+        <div class="progress-bar">
+            <div class="progress-fill"
+                 data-score="{{ item.score }}"
+                 data-weak="{{ 'yes' if item.weak else 'no' }}">
+            </div>
+        </div>
+
+    </div>
+    {% endfor %}
+
+    <a href="{{ url_for('skill_confidence') }}" class="btn-secondary">
+        View Full Report →
+    </a>
+
+</div>
+{% endif %}
 
 <!-- ================= DAILY CAREER TIP ================= -->
 <div class="daily-tip">

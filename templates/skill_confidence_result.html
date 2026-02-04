@@ -20,6 +20,11 @@
                  data-weak="{{ 'yes' if item.weak else 'no' }}">
             </div>
         </div>
+        <div class="skill-card">
+            <div class="progress-circle" style="--percentage: {{ item.score }};" data-value="{{ item.score }}%"></div>
+            <span class="skill-label">{{ item.skill }}</span>
+            <span class="level-tag">{{ item.level }}</span>
+        </div>
 
         {% if item.weak %}
         <p class="weak-text">⚠ Needs focus</p>

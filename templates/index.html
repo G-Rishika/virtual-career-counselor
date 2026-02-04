@@ -5,11 +5,26 @@
     <h1>Find Your Career Path<br>With AI-Powered Clarity</h1>
     <p>Personalized guidance, skill paths, insights and steps that match your potential.</p>
 
-    <div class="hero-buttons">
-        <a href="{{ url_for('signup') }}" class="btn-primary">Get Started</a>
-        <a href="{{ url_for('about') }}" class="btn-outline">How It Works</a>
+    <div class="portal-container">
+        <div class="portal-card user-portal">
+            <div class="portal-icon">👤</div>
+            <h3>Candidate Portal</h3>
+            <p>Find your dream career and analyze your skills.</p>
+            <a href="{{ url_for('login') }}" class="btn-portal">User Login</a>
+            <a href="{{ url_for('signup') }}" class="link-sub">New here? Create account</a>
+        </div>
+
+        <div class="portal-divider"><span>OR</span></div>
+
+        <div class="portal-card admin-portal">
+            <div class="portal-icon">🛠️</div>
+            <h3>Admin Control</h3>
+            <p>System oversight, user management, and project creation.</p>
+            <a href="{{ url_for('admin_login') }}" class="btn-portal admin-btn">Admin Login</a>
+            <a href="{{ url_for('admin_signup') }}" class="link-sub">Register as Administrator</a>
+        </div>
     </div>
-</section>
+    </section>
 
 <section class="features">
     <h2>What You Can Do</h2>
@@ -31,11 +46,6 @@
             <p>Monitor your skill development and milestones.</p>
         </div>
     </div>
-</section>
-
-<section class="cta">
-    <h2>Ready to start your career journey?</h2>
-    <a href="{{ url_for('signup') }}" class="btn-primary">Start Free</a>
 </section>
 
 {% endblock %}

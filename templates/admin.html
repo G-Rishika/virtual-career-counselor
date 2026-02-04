@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="admin-home">
+    <h1>🛠 Admin Control Center</h1>
+    <p>System oversight. No chaos. Full control.</p>
+
+    <div class="admin-grid">
+
+        <a href="{{ url_for('admin_dashboard') }}" class="admin-card">
+            📊 Dashboard
+            <span>Overview & stats</span>
+        </a>
+
+        <a href="{{ url_for('admin_users') }}" class="admin-card">
+            👥 Manage Users
+            <span>View registered users</span>
+        </a>
+
+        <a href="{{ url_for('admin_create_project') }}" class="admin-card">
+            🚀 Create Project
+            <span>Add new projects</span>
+        </a>
+
+        <a href="{{ url_for('admin_logout') }}" class="admin-card danger">
+            🚪 Logout
+            <span>End admin session</span>
+        </a>
+
+    </div>
+</div>
+
+{% endblock %}

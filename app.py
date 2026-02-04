@@ -4,6 +4,13 @@ import sqlite3
 app = Flask(__name__)
 app.secret_key = "super_secret_key"
 
+# ================= ADMIN CREDENTIALS =================
+ADMIN_USERNAME = "admin"
+ADMIN_PASSWORD = "admin"
+
+
+# ====================================================
+
 DB_NAME = "career.db"
 
 
@@ -36,6 +43,16 @@ def init_db():
         time_per_week INTEGER
     )
     """)
+
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS admins (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT,
+        email TEXT UNIQUE,
+        password TEXT
+    )
+    """)
+
 
     conn.commit()
     conn.close()
@@ -323,17 +340,32 @@ def logout():
 
 # ================= ADMIN AUTH =================
 
+@app.route("/admin")
+def admin_home():
+    if "admin" not in session:
+        return redirect(url_for("admin_login"))
+    return render_template("admin.html")
+
 @app.route("/admin/login", methods=["GET", "POST"])
 def admin_login():
     if request.method == "POST":
         email = request.form["email"]
         password = request.form["password"]
 
-        admin = Admin.query.filter_by(email=email).first()
+        conn = get_db()
+        cur = conn.cursor()
+        cur.execute(
+            "SELECT * FROM admins WHERE email=? AND password=?",
+            (email, password)
+        )
+        admin = cur.fetchone()
+        conn.close()
 
-        if admin and admin.password == password:
-            session["admin"] = admin.email
-            return redirect(url_for("admin_dashboard"))
+        if admin:
+            session["admin"] = admin["email"]
+            return redirect(url_for("admin_home"))
+
+        return "Invalid admin credentials"
 
     return render_template("admin_login.html")
 
@@ -341,17 +373,26 @@ def admin_login():
 @app.route("/admin/signup", methods=["GET", "POST"])
 def admin_signup():
     if request.method == "POST":
-        admin = Admin(
-            name=request.form["name"],
-            email=request.form["email"],
-            password=request.form["password"]
-        )
-        db.session.add(admin)
-        db.session.commit()
+        name = request.form["name"]
+        email = request.form["email"]
+        password = request.form["password"]
+
+        conn = get_db()
+        cur = conn.cursor()
+        try:
+            cur.execute(
+                "INSERT INTO admins (name, email, password) VALUES (?, ?, ?)",
+                (name, email, password)
+            )
+            conn.commit()
+        except:
+            return "Admin already exists"
+        finally:
+            conn.close()
+
         return redirect(url_for("admin_login"))
 
     return render_template("admin_signup.html")
-
 
 @app.route("/admin/dashboard")
 def admin_dashboard():
@@ -359,31 +400,54 @@ def admin_dashboard():
         return redirect(url_for("admin_login"))
     return render_template("admin_dashboard.html")
 
-
 @app.route("/admin/users")
 def admin_users():
     if "admin" not in session:
         return redirect(url_for("admin_login"))
 
-    users = User.query.all()
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute("SELECT id, username, email FROM users")
+    users = cur.fetchall()
+    conn.close()
+
     return render_template("admin_users.html", users=users)
 
-
-@app.route("/admin/project/create", methods=["GET", "POST"])
+@app.route("/admin/create-project", methods=["GET", "POST"])
 def admin_create_project():
     if "admin" not in session:
         return redirect(url_for("admin_login"))
 
     if request.method == "POST":
-        project = Project(
-            title=request.form["title"],
-            description=request.form["description"]
+        title = request.form["title"]
+        description = request.form["description"]
+
+        conn = get_db()
+        cur = conn.cursor()
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS projects (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                title TEXT,
+                description TEXT
+            )
+        """)
+        cur.execute(
+            "INSERT INTO projects (title, description) VALUES (?, ?)",
+            (title, description)
         )
-        db.session.add(project)
-        db.session.commit()
+        conn.commit()
+        conn.close()
+
         return redirect(url_for("admin_dashboard"))
 
     return render_template("admin_create_project.html")
+
+@app.route("/admin/logout")
+def admin_logout():
+    session.pop("admin", None)
+    return redirect(url_for("admin_login"))
+
+# ================= RESUME ANALYSIS ================= #
 
 @app.route("/resume", methods=["GET", "POST"])
 def resume():
