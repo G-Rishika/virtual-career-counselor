@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AWS Infrastructure Status</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h2>AWS Infrastructure Status</h2>
+    
+    <h3>IAM User Info</h3>
+    <ul>
+        <li><strong>Username:</strong> {{ user.UserName }}</li>
+        <li><strong>ARN:</strong> {{ user.Arn }}</li>
+    </ul>
+
+    <h3>EC2 Instances</h3>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Instance ID</th>
+                <th>State</th>
+                <th>Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for inst in instances %}
+            <tr>
+                <td>{{ inst.id }}</td>
+                <td>{{ inst.state }}</td>
+                <td>{{ inst.type }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <br>
+    <a href="{{ url_for('admin_dashboard') }}">Back to Dashboard</a>
+</body>
+</html>

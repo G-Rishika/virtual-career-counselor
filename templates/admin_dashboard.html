@@ -17,6 +17,11 @@
             🔓 Logout
         </a>
     </div>
+
+    <div class="admin-actions">
+        <h3>System Tools</h3>
+        <a href="{{ url_for('aws_status') }}" class="btn">View AWS Infrastructure Status</a>
+    </div>
 </section>
 
 {% endblock %}

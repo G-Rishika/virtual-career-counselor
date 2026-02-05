@@ -8,11 +8,9 @@ app.secret_key = "super_secret_key"
 ADMIN_USERNAME = "admin"
 ADMIN_PASSWORD = "admin"
 
-
-# ====================================================
+# =====================================================
 
 DB_NAME = "career.db"
-
 
 # -------------------- DATABASE --------------------
 def get_db():

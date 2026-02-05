@@ -5,6 +5,7 @@ import random
 import os
 from botocore.exceptions import ClientError
 from dotenv import load_dotenv
+from boto3.dynamodb.conditions import Key, Attr
 
 # Load AWS credentials from the .env file
 load_dotenv()
@@ -26,6 +27,15 @@ dynamodb = boto3.resource(
 users_table = dynamodb.Table("Users")
 admins_table = dynamodb.Table("Admins")
 projects_table = dynamodb.Table("Projects")
+profiles_table = dynamodb.Table("Profiles")
+
+# New Clients
+sns = boto3.client("sns", region_name=REGION)
+ec2 = boto3.client("ec2", region_name=REGION)
+iam = boto3.client("iam", region_name=REGION)
+
+# Replace with your actual SNS Topic ARN after creating it in AWS Console
+TOPIC_ARN = os.getenv("AWS_SNS_TOPIC_ARN")
 
 # ================= LANDING =================
 @app.route("/")
@@ -47,6 +57,7 @@ def signup():
         password = request.form["password"]
 
         try:
+            # 1. Save to DynamoDB (Original Task)
             users_table.put_item(
                 Item={
                     "username": username,
@@ -55,8 +66,25 @@ def signup():
                 },
                 ConditionExpression="attribute_not_exists(username)"
             )
-        except ClientError:
-            return "User already exists"
+            
+            # 2. SNS Integration (New Task)
+            # This only runs if the DynamoDB put_item succeeds!
+            sns.publish(
+                TopicArn=TOPIC_ARN,
+                Message=f"New user registered: {username} ({email})",
+                Subject="New User Signup Alert"
+            )
+
+        except ClientError as e:
+            # Check if it's the 'User already exists' error
+            if e.response['Error']['Code'] == 'ConditionalCheckFailedException':
+                return "User already exists"
+            return "A database error occurred"
+        except Exception as e:
+            # Catch SNS or other unexpected errors
+            print(f"Notification Failed: {e}")
+            # We still redirect because the user was created successfully
+            return redirect(url_for("login"))
 
         return redirect(url_for("login"))
 
@@ -156,6 +184,36 @@ def admin_dashboard():
         users=users,
         projects=projects
     )
+
+# ================= AWS INFRASTRUCTURE STATUS =================
+
+@app.route("/admin/aws-status")
+def aws_status():
+    """Combined view of EC2 and IAM so you only need ONE new HTML file"""
+    if "admin" not in session:
+        return redirect(url_for("admin_login"))
+
+    # 1. Fetch EC2 Data
+    instances = []
+    try:
+        response = ec2.describe_instances()
+        for reservation in response["Reservations"]:
+            for inst in reservation["Instances"]:
+                instances.append({
+                    "id": inst["InstanceId"],
+                    "state": inst["State"]["Name"],
+                    "type": inst["InstanceType"]
+                })
+    except Exception as e:
+        instances = [{"id": "Error", "state": str(e), "type": "N/A"}]
+
+    # 2. Fetch IAM Data
+    try:
+        user_info = iam.get_user()["User"]
+    except Exception as e:
+        user_info = {"UserName": "Access Denied", "Arn": str(e)}
+
+    return render_template("admin_aws_status.html", instances=instances, user=user_info)
 
 # ================= ADMIN CREATE PROJECT =================
 @app.route("/admin/create-project", methods=["GET", "POST"])
@@ -378,7 +436,8 @@ def resume():
         # Role-based skill check (This makes it 'smart')
         role_skills = {
             "data scientist": ["python", "pandas", "sql", "machine learning"],
-            "software developer": ["python", "git", "flask", "css"]
+            "software developer": ["python", "git", "flask", "css"],
+            "ai engineer": ["python", "machine learning", "deep learning", "tensorflow"]
         }
         
         required = role_skills.get(target_role, [])
@@ -463,9 +522,43 @@ def recommendations():
     career = session.get("quiz_result", "Software Developer")
     
     recs = {
-        "Software Developer": {"internships": ["Web Intern", "Backend Intern"], "projects": ["E-commerce Site"]},
-        "Data Scientist": {"internships": ["Analytics Intern"], "projects": ["Weather Predictor"]}
+    "Data Analyst": {
+        "internships": [
+            "Data Analysis Internship",
+            "Business Intelligence Intern",
+            "Excel & SQL Intern"
+        ],
+        "projects": [
+            "Sales Data Dashboard",
+            "Customer Churn Analysis",
+            "COVID Data Visualization"
+        ]
+    },
+    "Software Developer": {
+        "internships": [
+            "Python Developer Intern",
+            "Web Developer Intern",
+            "Backend Developer Intern"
+        ],
+        "projects": [
+            "Flask Web App",
+            "Task Manager App",
+            "REST API using Python"
+        ]
+    },
+    "Machine Learning Engineer": {
+        "internships": [
+            "ML Internship",
+            "AI Research Intern",
+            "Data Science Intern"
+        ],
+        "projects": [
+            "Spam Email Classifier",
+            "Face Recognition System",
+            "Movie Recommendation System"
+        ]
     }
+}
     
     data = recs.get(career)
     return render_template("recommendations.html", career=career, internships=data["internships"], projects=data["projects"])
