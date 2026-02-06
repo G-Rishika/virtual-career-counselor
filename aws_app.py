@@ -56,7 +56,7 @@ iam = boto3.client(
 )
 
 # Replace with your actual SNS Topic ARN after creating it in AWS Console
-TOPIC_ARN = os.getenv("AWS_SNS_TOPIC_ARN")
+SNS_TOPIC_ARN = 'arn:aws:sns:us-east-1:311141554074:aws_capstone_vcc'
 
 # ================= LANDING =================
 @app.route("/")
@@ -91,7 +91,7 @@ def signup():
             # 2. SNS Integration (New Task)
             # This only runs if the DynamoDB put_item succeeds!
             sns.publish(
-                TopicArn=TOPIC_ARN,
+                TopicArn=SNS_TOPIC_ARN,
                 Message=f"New user registered: {username} ({email})",
                 Subject="New User Signup Alert"
             )
