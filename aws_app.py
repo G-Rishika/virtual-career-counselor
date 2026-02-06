@@ -6,6 +6,8 @@ import os
 from botocore.exceptions import ClientError
 from dotenv import load_dotenv
 from boto3.dynamodb.conditions import Key, Attr
+from werkzeug.security import generate_password_hash, check_password_hash
+
 
 # Load AWS credentials from the .env file
 load_dotenv()
@@ -18,11 +20,6 @@ app.secret_key = "aws_super_secret_key"
 REGION = os.getenv("AWS_DEFAULT_REGION", "us-east-1")
 
 dynamodb = boto3.resource("dynamodb", region_name=REGION)
-
-users_table = dynamodb.Table("Users")
-admins_table = dynamodb.Table("Admins")
-projects_table = dynamodb.Table("Projects")
-profiles_table = dynamodb.Table("Profiles")
 
 AWS_ACCESS_KEY = os.getenv("AWS_ACCESS_KEY_ID")
 AWS_SECRET_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
@@ -54,6 +51,11 @@ iam = boto3.client(
     aws_secret_access_key=AWS_SECRET_KEY,
     region_name=REGION
 )
+
+users_table = dynamodb.Table("Users")
+admins_table = dynamodb.Table("Admins")
+projects_table = dynamodb.Table("Projects")
+profiles_table = dynamodb.Table("Profiles")
 
 # Replace with your actual SNS Topic ARN after creating it in AWS Console
 SNS_TOPIC_ARN = 'arn:aws:sns:us-east-1:311141554074:aws_capstone_vcc'
@@ -97,10 +99,11 @@ def signup():
             )
 
         except ClientError as e:
-            # Check if it's the 'User already exists' error
-            if e.response['Error']['Code'] == 'ConditionalCheckFailedException':
+            print("DYNAMODB ERROR:", e.response["Error"])
+            if e.response["Error"]["Code"] == "ConditionalCheckFailedException":
                 return "User already exists"
-            return "A database error occurred"
+            return e.response["Error"]["Message"]
+
         except Exception as e:
             # Catch SNS or other unexpected errors
             print(f"Notification Failed: {e}")
