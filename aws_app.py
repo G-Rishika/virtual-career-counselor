@@ -4,53 +4,20 @@ import uuid
 import random
 import os
 from botocore.exceptions import ClientError
-from dotenv import load_dotenv
 from boto3.dynamodb.conditions import Key, Attr
 from werkzeug.security import generate_password_hash, check_password_hash
-
-
-# Load AWS credentials from the .env file
-load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = "aws_super_secret_key"
 
 # ================= AWS CONFIG =================
-# Pulls credentials from your .env file
 REGION = os.getenv("AWS_DEFAULT_REGION", "us-east-1")
 
 dynamodb = boto3.resource("dynamodb", region_name=REGION)
+sns = boto3.client("sns", region_name=REGION)
+ec2 = boto3.client("ec2", region_name=REGION)
+iam = boto3.client("iam", region_name=REGION)
 
-AWS_ACCESS_KEY = os.getenv("AWS_ACCESS_KEY_ID")
-AWS_SECRET_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
-
-dynamodb = boto3.resource(
-    "dynamodb",
-    aws_access_key_id=AWS_ACCESS_KEY,
-    aws_secret_access_key=AWS_SECRET_KEY,
-    region_name=REGION
-)
-
-sns = boto3.client(
-    "sns",
-    aws_access_key_id=AWS_ACCESS_KEY,
-    aws_secret_access_key=AWS_SECRET_KEY,
-    region_name=REGION
-)
-
-ec2 = boto3.client(
-    "ec2",
-    aws_access_key_id=AWS_ACCESS_KEY,
-    aws_secret_access_key=AWS_SECRET_KEY,
-    region_name=REGION
-)
-
-iam = boto3.client(
-    "iam",
-    aws_access_key_id=AWS_ACCESS_KEY,
-    aws_secret_access_key=AWS_SECRET_KEY,
-    region_name=REGION
-)
 
 users_table = dynamodb.Table("Users")
 admins_table = dynamodb.Table("Admins")
