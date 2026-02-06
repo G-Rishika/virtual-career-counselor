@@ -17,22 +17,43 @@ app.secret_key = "aws_super_secret_key"
 # Pulls credentials from your .env file
 REGION = os.getenv("AWS_DEFAULT_REGION", "us-east-1")
 
-dynamodb = boto3.resource(
-    "dynamodb",
-    region_name=REGION,
-    aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
-    aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY")
-)
+dynamodb = boto3.resource("dynamodb", region_name=REGION)
 
 users_table = dynamodb.Table("Users")
 admins_table = dynamodb.Table("Admins")
 projects_table = dynamodb.Table("Projects")
 profiles_table = dynamodb.Table("Profiles")
 
-# New Clients
-sns = boto3.client("sns", region_name=REGION)
-ec2 = boto3.client("ec2", region_name=REGION)
-iam = boto3.client("iam", region_name=REGION)
+AWS_ACCESS_KEY = os.getenv("AWS_ACCESS_KEY_ID")
+AWS_SECRET_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+
+dynamodb = boto3.resource(
+    "dynamodb",
+    aws_access_key_id=AWS_ACCESS_KEY,
+    aws_secret_access_key=AWS_SECRET_KEY,
+    region_name=REGION
+)
+
+sns = boto3.client(
+    "sns",
+    aws_access_key_id=AWS_ACCESS_KEY,
+    aws_secret_access_key=AWS_SECRET_KEY,
+    region_name=REGION
+)
+
+ec2 = boto3.client(
+    "ec2",
+    aws_access_key_id=AWS_ACCESS_KEY,
+    aws_secret_access_key=AWS_SECRET_KEY,
+    region_name=REGION
+)
+
+iam = boto3.client(
+    "iam",
+    aws_access_key_id=AWS_ACCESS_KEY,
+    aws_secret_access_key=AWS_SECRET_KEY,
+    region_name=REGION
+)
 
 # Replace with your actual SNS Topic ARN after creating it in AWS Console
 TOPIC_ARN = os.getenv("AWS_SNS_TOPIC_ARN")
