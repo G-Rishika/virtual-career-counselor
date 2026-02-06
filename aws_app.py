@@ -176,6 +176,14 @@ def admin_dashboard():
         projects=projects
     )
 
+@app.route("/admin/users")
+def admin_users():
+    if "admin" not in session:
+        return redirect(url_for("admin_login"))
+
+    users = users_table.scan().get("Items", [])
+    return render_template("admin_users.html", users=users)
+
 # ================= AWS INFRASTRUCTURE STATUS =================
 
 @app.route("/admin/aws-status")
